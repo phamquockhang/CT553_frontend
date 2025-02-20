@@ -1,0 +1,155 @@
+@import url(./assets/font/font.css);
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html {
+    height: 100%;
+    font-family: "Calibri", sans-serif;
+    line-height: 2;
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100%;
+    background-color: #ffffff;
+    color: #000000;
+    font-size: 16px;
+    font-weight: 300;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    border: 0;
+    alt: "";
+  }
+
+  a {
+    text-decoration: none;
+    color: inherit;
+    transition: color 0.3s ease;
+    &:hover {
+      color: #007acc;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      font-weight: 600;
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+
+    ul,
+    ol {
+      margin: 1rem 0;
+      padding-left: 1.5rem;
+      list-style-position: inside;
+    }
+
+    p {
+      margin-bottom: 1rem;
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font-family: inherit;
+      font-size: 100%;
+      margin: 0;
+      padding: 0;
+      border: 0;
+      background: none;
+    }
+
+    /* Responsive Design */
+    @media (min-width: 768px) {
+      body {
+        font-size: 18px;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      body {
+        font-size: 20px;
+      }
+    }
+
+    main {
+      display: block;
+      padding: 1rem;
+    }
+
+    [alt],
+    [title] {
+      text-decoration: underline dotted;
+    }
+
+    ::selection {
+      background-color: #007acc;
+      color: #ffffff;
+    }
+  }
+
+  .text-heading-1 {
+    font-family: "Calibri";
+    font-weight: 600;
+    line-height: 1.2;
+    color: black;
+    font-size: 28px;
+    letter-spacing: 0.5px;
+    font-style: normal;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+  }
+
+  .text-heading-2 {
+    font-family: "Calibri";
+    font-weight: 600;
+    line-height: 1.2;
+    color: black;
+    font-size: 22px;
+    letter-spacing: 0.5px;
+    font-style: normal;
+    margin-bottom: 20px;
+  }
+
+  .text-heading-3 {
+    font-family: "Calibri";
+    font-weight: 600;
+    line-height: 1.2;
+    color: black;
+    font-size: 18px;
+    letter-spacing: 0.5px;
+    font-style: normal;
+  }
+
+  .title-4 {
+    font-family: "Calibri";
+    font-weight: 500;
+    line-height: 1.2;
+    color: black;
+    font-size: 14px;
+    font-style: normal;
+  }
+}
