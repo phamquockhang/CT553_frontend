@@ -1,6 +1,7 @@
 import { AudioOutlined, CloseOutlined } from "@ant-design/icons";
 import { Input, message } from "antd";
 import React, { useEffect, useRef, useState } from "react";
+import { IoIosSearch } from "react-icons/io";
 
 declare global {
   interface Window {
@@ -77,7 +78,9 @@ const BoxSearch: React.FC = () => {
   return (
     <>
       <Input
-        placeholder="Tìm kiếm..."
+        addonBefore={<IoIosSearch className="text-2xl" />}
+        allowClear
+        placeholder="Tìm kiếm sản phẩm..."
         className="w-80 p-2 focus:outline-none focus:ring-0"
         value={transcript}
         onChange={handleInputChange}

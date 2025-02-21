@@ -19,17 +19,26 @@ import { AiFillLike } from "react-icons/ai";
 import { FaShippingFast } from "react-icons/fa";
 import { PiCodesandboxLogoBold } from "react-icons/pi";
 import { MdOutlinePublishedWithChanges } from "react-icons/md";
+import useStickyScroll from "../features/components/hooks/useStickyScroll";
+import BoxSearch from "./components/BoxSearch";
 
 const Header: React.FC = () => {
   const navigate = useNavigate();
   const [showAccountMenu, setShowAccountMenu] = useState<boolean>(false);
   const [user, setUser] = useState<ICustomer | IStaff | null>(null);
   const accessToken = localStorage.getItem("access_token");
+  const isSticky = useStickyScroll();
 
-  const { data, isLoading } = useQuery({
+  const currentPath = window.location.pathname;
+  const pathParts = currentPath.split("/");
+
+  console.log(pathParts[pathParts.length - 1]);
+
+  const { data } = useQuery({
     queryKey: ["allItems"],
     queryFn: itemService.getAllItems,
   });
+  console.log(data);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -108,7 +117,9 @@ const Header: React.FC = () => {
   ];
 
   return (
-    <header className="sticky top-0 z-50 rounded-b-3xl bg-white shadow-md">
+    <header
+      className={`${isSticky ? "-translate-y-0" : `-translate-y-[100%]`} sticky top-0 z-50 rounded-b-3xl bg-white shadow-md transition-all duration-500`}
+    >
       <img
         src="src/assets/image/banners/banner-header.jpg"
         alt="Banner Header"
@@ -175,7 +186,8 @@ const Header: React.FC = () => {
 
         {/* Right Side Menus */}
         <div className="flex items-center">
-          <Search />
+          {/* <Search /> */}
+          <BoxSearch />
           <Divider type="vertical" className="h-6 bg-black" />
           {showAccountMenu ? (
             <>
@@ -218,51 +230,54 @@ const Header: React.FC = () => {
         </div>
       </div>
 
-      <div className="hidden justify-center border-t border-gray-200 py-2 transition-all duration-500 md:flex md:gap-1 lg:gap-16 xl:gap-32">
-        <div className="flex items-center justify-center gap-2">
-          <div className="rounded-full bg-[#003F8F] p-2">
-            <AiFillLike className="text-2xl text-white" />
-          </div>
+      {pathParts[pathParts.length - 1] !== "login" &&
+        pathParts[pathParts.length - 1] !== "register" && (
+          <div className="hidden justify-center border-t border-gray-200 py-4 transition-all duration-500 md:flex md:gap-1 lg:gap-16 xl:gap-32">
+            <div className="flex items-center justify-center gap-2">
+              <div className="rounded-full bg-[#003F8F] p-2">
+                <AiFillLike className="text-2xl text-white" />
+              </div>
 
-          <div>
-            <p className="text-xl leading-none">Cam kết chất lượng</p>
-            <p className="text-xl leading-none">An toàn xuất xứ</p>
-          </div>
-        </div>
+              <div>
+                <p className="text-xl leading-none">Cam kết chất lượng</p>
+                <p className="text-xl leading-none">An toàn xuất xứ</p>
+              </div>
+            </div>
 
-        <div className="flex items-center justify-center gap-2">
-          <div className="rounded-full bg-[#003F8F] p-2">
-            <MdOutlinePublishedWithChanges className="text-2xl text-white" />
-          </div>
+            <div className="flex items-center justify-center gap-2">
+              <div className="rounded-full bg-[#003F8F] p-2">
+                <MdOutlinePublishedWithChanges className="text-2xl text-white" />
+              </div>
 
-          <div>
-            <p className="text-xl leading-none">1 đổi 1 trong 2h</p>
-            <p className="text-xl leading-none">Nhanh chóng, tận nhà</p>
-          </div>
-        </div>
+              <div>
+                <p className="text-xl leading-none">1 đổi 1 trong 2h</p>
+                <p className="text-xl leading-none">Nhanh chóng, tận nhà</p>
+              </div>
+            </div>
 
-        <div className="flex items-center justify-center gap-2">
-          <div className="rounded-full bg-[#003F8F] p-2">
-            <PiCodesandboxLogoBold className="text-2xl text-white" />
-          </div>
+            <div className="flex items-center justify-center gap-2">
+              <div className="rounded-full bg-[#003F8F] p-2">
+                <PiCodesandboxLogoBold className="text-2xl text-white" />
+              </div>
 
-          <div>
-            <p className="text-xl leading-none">Chuẩn đóng gói</p>
-            <p className="text-xl leading-none">Sạch sẽ, tiện lợi</p>
-          </div>
-        </div>
+              <div>
+                <p className="text-xl leading-none">Chuẩn đóng gói</p>
+                <p className="text-xl leading-none">Sạch sẽ, tiện lợi</p>
+              </div>
+            </div>
 
-        <div className="flex items-center justify-center gap-2">
-          <div className="rounded-full bg-[#003F8F] p-2">
-            <FaShippingFast className="text-2xl text-white" />
-          </div>
+            <div className="flex items-center justify-center gap-2">
+              <div className="rounded-full bg-[#003F8F] p-2">
+                <FaShippingFast className="text-2xl text-white" />
+              </div>
 
-          <div>
-            <p className="text-xl leading-none">Giao hàng nhanh</p>
-            <p className="text-xl leading-none">Free Ship</p>
+              <div>
+                <p className="text-xl leading-none">Giao hàng nhanh</p>
+                <p className="text-xl leading-none">Free Ship</p>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
+        )}
     </header>
   );
 };
