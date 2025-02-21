@@ -23,7 +23,7 @@ export default function Footer() {
 
   return (
     <footer className="bg-gray-100 py-8 text-[#003F8F]">
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-10">
         <div className="mb-8">
           <h3 className="font-bold">Đối tác của K-Seafood</h3>
           <Carousel
