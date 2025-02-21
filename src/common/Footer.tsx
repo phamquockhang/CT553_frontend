@@ -23,7 +23,7 @@ export default function Footer() {
 
   return (
     <footer className="bg-gray-100 py-8 text-[#003F8F]">
-      <div className="container mx-auto px-10">
+      <div className="container mx-auto px-5 transition-all duration-200 sm:px-0 xl:px-10">
         <div className="mb-8">
           <h3 className="font-bold">Đối tác của K-Seafood</h3>
           <Carousel
@@ -33,6 +33,20 @@ export default function Footer() {
             pauseOnHover={false}
             slidesToShow={5}
             dots={false}
+            responsive={[
+              {
+                breakpoint: 1024,
+                settings: {
+                  slidesToShow: 3,
+                },
+              },
+              {
+                breakpoint: 640,
+                settings: {
+                  slidesToShow: 2,
+                },
+              },
+            ]}
           >
             {brandsImages.map((brand, index) => (
               <div className="overflow-hidden p-2" key={index}>
