@@ -1,3 +1,4 @@
+import { useQuery } from "@tanstack/react-query";
 import {
   Anchor,
   Menu as AntdMenu,
@@ -7,20 +8,18 @@ import {
   Dropdown,
 } from "antd";
 import { useCallback, useEffect, useState } from "react";
+import { AiFillLike } from "react-icons/ai";
+import { FaShippingFast } from "react-icons/fa";
+import { MdOutlinePublishedWithChanges } from "react-icons/md";
+import { PiCodesandboxLogoBold } from "react-icons/pi";
 import { Link, useNavigate } from "react-router-dom";
+import useStickyScroll from "../features/components/hooks/useStickyScroll";
 import { ICustomer, IStaff, PRIMARY_COLOR } from "../interfaces";
 import { customerService, itemService, staffService } from "../services";
 import AccountMenu from "./components/AccountMenu";
-import Menu from "./components/Menu";
-import Search from "./components/Search";
-import ShoppingCart from "./components/ShoppingCart";
-import { useQuery } from "@tanstack/react-query";
-import { AiFillLike } from "react-icons/ai";
-import { FaShippingFast } from "react-icons/fa";
-import { PiCodesandboxLogoBold } from "react-icons/pi";
-import { MdOutlinePublishedWithChanges } from "react-icons/md";
-import useStickyScroll from "../features/components/hooks/useStickyScroll";
 import BoxSearch from "./components/BoxSearch";
+import Menu from "./components/Menu";
+import ShoppingCart from "./components/ShoppingCart";
 
 const Header: React.FC = () => {
   const navigate = useNavigate();
@@ -32,13 +31,13 @@ const Header: React.FC = () => {
   const currentPath = window.location.pathname;
   const pathParts = currentPath.split("/");
 
-  console.log(pathParts[pathParts.length - 1]);
+  // console.log(pathParts[pathParts.length - 1]);
 
   const { data } = useQuery({
     queryKey: ["allItems"],
     queryFn: itemService.getAllItems,
   });
-  console.log(data);
+  // console.log(data);
 
   useEffect(() => {
     const fetchUserData = async () => {

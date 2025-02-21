@@ -4,6 +4,7 @@ import ErrorPage from "../common/ErrorPage";
 import Login from "../pages/Login";
 import Home from "../pages/Home";
 import Register from "../pages/Register";
+import BestSellerProducts from "../pages/BestSellerProducts";
 
 const router = createBrowserRouter([
   {
@@ -22,6 +23,36 @@ const router = createBrowserRouter([
       {
         path: "register",
         element: <Register />,
+      },
+      {
+        path: "items",
+        children: [
+          {
+            path: "",
+            element: <div>Items</div>,
+          },
+          {
+            path: ":itemId",
+            element: <div>Item Detail</div>,
+          },
+          {
+            path: "best-seller-products",
+            element: <BestSellerProducts />,
+          },
+        ],
+      },
+      {
+        path: "products",
+        children: [
+          {
+            path: "",
+            element: <div>Products</div>,
+          },
+          {
+            path: ":productId",
+            element: <div>Product Detail</div>,
+          },
+        ],
       },
     ],
   },
