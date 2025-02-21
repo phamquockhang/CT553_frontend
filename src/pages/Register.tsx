@@ -1,7 +1,10 @@
 import React from "react";
 import RegisterForm from "../features/auth/RegisterForm";
+import { useDynamicTitle } from "../utils";
 
 const Register: React.FC = () => {
+  useDynamicTitle("Đăng ký");
+
   return (
     <div className="flex">
       <div className="flex min-h-full flex-1 flex-col justify-center transition-all duration-1000">

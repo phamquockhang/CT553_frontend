@@ -104,7 +104,7 @@ const Header: React.FC = () => {
         </Link>
 
         {/* Menu Navigation */}
-        <div className="hidden items-center xl:flex">
+        <div className="hidden items-center lg:flex">
           <ConfigProvider
             theme={{
               token: {
