@@ -13,10 +13,12 @@ const Banners: React.FC = () => {
             slidesToShow={1}
             className="rounded-lg"
           >
-            <img
-              src="src/assets/image/banners/banner-1.1.1.jpg"
-              className="mx-auto w-full rounded-2xl"
-            />
+            <a href="/products/bao-ngu">
+              <img
+                src="src/assets/image/banners/banner-1.1.1.jpg"
+                className="mx-auto w-full rounded-2xl"
+              />
+            </a>
             <img
               src="src/assets/image/banners/banner-1.1.2.jpg"
               className="mx-auto w-full rounded-2xl"

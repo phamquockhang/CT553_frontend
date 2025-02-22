@@ -3,40 +3,44 @@ import BreadCrumb from "../common/BreadCrumb";
 import Loading from "../common/Loading";
 import OverviewProduct from "../features/category/products/OverviewProduct";
 import { IProduct } from "../interfaces";
-import { productService } from "../services";
+import { itemService } from "../services";
 import { useDynamicTitle } from "../utils";
 
-const BestSellerallProducts: React.FC = () => {
-  useDynamicTitle("Các sản phẩm bán chạy");
+const Item: React.FC = () => {
+  const currentPath = window.location.pathname;
+  const pathParts = currentPath.split("/");
+  const itemId = parseInt(pathParts[pathParts.length - 1]);
 
-  const { data: bestSellerProducts, isLoading: isLoadingBestSellerProducts } =
-    useQuery({
-      queryKey: ["allProducts"],
-      queryFn: productService.getAllProducts,
-    });
-
-  const allProducts = bestSellerProducts?.payload || [];
-  allProducts.sort((a: IProduct, b: IProduct) => {
-    return a.productName.localeCompare(b.productName);
+  const { data, isLoading: isItemLoading } = useQuery({
+    queryKey: ["item", itemId],
+    queryFn: () => itemService.getItem(itemId),
   });
 
-  if (isLoadingBestSellerProducts) return <Loading />;
+  const productsData = data?.payload?.products;
+
+  useDynamicTitle(data?.payload?.itemName || "Item Detail");
+
+  if (isItemLoading) return <Loading />;
+
+  productsData?.sort((a: IProduct, b: IProduct) => {
+    return a.productName.localeCompare(b.productName);
+  });
 
   window.scrollTo(0, 0);
 
   return (
     <div>
-      <BreadCrumb children="Các sản phẩm bán chạy" />
+      <BreadCrumb children={data?.payload?.itemName} />
 
       <div className="container mx-auto px-5 transition-all duration-200 sm:px-10 xl:px-20">
-        {allProducts && (
+        {productsData && (
           <div className="my-10">
             <div className="mb-2 flex items-center justify-between">
-              <h2 className="text-2xl font-bold">Các sản phẩm bán chạy</h2>
+              <h2 className="text-2xl font-bold">{data?.payload?.itemName}</h2>
             </div>
 
             <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
-              {allProducts.map((product) => (
+              {productsData.map((product) => (
                 <OverviewProduct product={product} />
               ))}
             </div>
@@ -47,4 +51,4 @@ const BestSellerallProducts: React.FC = () => {
   );
 };
 
-export default BestSellerallProducts;
+export default Item;
