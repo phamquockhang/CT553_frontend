@@ -2,6 +2,7 @@ import { AudioOutlined, CloseOutlined } from "@ant-design/icons";
 import { Input, message } from "antd";
 import React, { useEffect, useRef, useState } from "react";
 import { IoIosSearch } from "react-icons/io";
+import { useNavigate } from "react-router-dom";
 
 declare global {
   interface Window {
@@ -15,6 +16,7 @@ const BoxSearch: React.FC = () => {
   const [transcript, setTranscript] = useState("");
   const [error, setError] = useState<string | null>(null);
   const recognitionRef = useRef<any>(null);
+  const navigate = useNavigate();
 
   const startListening = () => {
     const SpeechRecognition =
@@ -40,6 +42,10 @@ const BoxSearch: React.FC = () => {
       const speechResult = (event as any).results[0][0].transcript;
       setTranscript(speechResult);
       setIsListening(false);
+
+      if (speechResult.trim() !== "") {
+        navigate(`/search?query=${encodeURIComponent(speechResult)}`);
+      }
     };
 
     recognition.onerror = (event: any) => {
@@ -63,8 +69,19 @@ const BoxSearch: React.FC = () => {
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setTranscript(value);
+    setTranscript(e.target.value);
+  };
+
+  const handleSearch = () => {
+    if (transcript.trim() !== "") {
+      navigate(`/search?query=${encodeURIComponent(transcript)}`);
+    }
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleSearch();
+    }
   };
 
   useEffect(() => {
@@ -84,6 +101,7 @@ const BoxSearch: React.FC = () => {
         className="w-80 p-2 focus:outline-none focus:ring-0"
         value={transcript}
         onChange={handleInputChange}
+        onPressEnter={handleKeyPress} // Khi nhấn Enter
         suffix={
           isListening ? (
             <CloseOutlined

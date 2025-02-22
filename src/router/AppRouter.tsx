@@ -7,6 +7,7 @@ import Register from "../pages/Register";
 import BestSellerProducts from "../pages/BestSellerProducts";
 import Product from "../pages/Product";
 import Item from "../pages/Item";
+import Search from "../pages/Search";
 
 const router = createBrowserRouter([
   {
@@ -55,6 +56,10 @@ const router = createBrowserRouter([
             element: <Product />,
           },
         ],
+      },
+      {
+        path: "search",
+        element: <Search />,
       },
     ],
   },
