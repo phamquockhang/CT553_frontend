@@ -3,7 +3,7 @@ import BreadCrumb from "../common/BreadCrumb";
 import Loading from "../common/Loading";
 import OverviewProduct from "../features/category/products/OverviewProduct";
 import { IProduct } from "../interfaces";
-import { itemService, productService } from "../services";
+import { productService } from "../services";
 import { useDynamicTitle } from "../utils";
 
 const BestSellerallProducts: React.FC = () => {
@@ -15,11 +15,6 @@ const BestSellerallProducts: React.FC = () => {
       queryFn: productService.getAllProducts,
     });
 
-  const { data: allItems } = useQuery({
-    queryKey: ["allItems"],
-    queryFn: itemService.getAllItems,
-  });
-
   const allProducts = bestSellerProducts?.payload || [];
   allProducts.sort((a: IProduct, b: IProduct) => {
     return a.productName.localeCompare(b.productName);
@@ -29,18 +24,13 @@ const BestSellerallProducts: React.FC = () => {
 
   window.scrollTo(0, 0);
 
-  const menuItems = allItems?.payload?.map((item) => ({
-    key: item.itemId,
-    label: <a href={`/items/${item.itemId}`}>{item.itemName}</a>,
-  }));
-
   return (
     <div>
-      <BreadCrumb menuItems={menuItems} children="Các sản phẩm bán chạy" />
+      <BreadCrumb children="Các sản phẩm bán chạy" />
 
       <div className="container mx-auto px-5 transition-all duration-200 sm:px-10 xl:px-20">
         {allProducts && (
-          <div className="mt-10">
+          <div className="my-10">
             <div className="mb-2 flex items-center justify-between">
               <h2 className="text-2xl font-bold">Các sản phẩm bán chạy</h2>
             </div>
