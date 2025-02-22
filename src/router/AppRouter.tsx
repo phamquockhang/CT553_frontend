@@ -5,6 +5,8 @@ import Login from "../pages/Login";
 import Home from "../pages/Home";
 import Register from "../pages/Register";
 import BestSellerProducts from "../pages/BestSellerProducts";
+import Product from "../pages/Product";
+import Item from "../pages/Item";
 
 const router = createBrowserRouter([
   {
@@ -33,7 +35,7 @@ const router = createBrowserRouter([
           },
           {
             path: ":itemId",
-            element: <div>Item Detail</div>,
+            element: <Item />,
           },
           {
             path: "best-seller-products",
@@ -50,7 +52,7 @@ const router = createBrowserRouter([
           },
           {
             path: ":productId",
-            element: <div>Product Detail</div>,
+            element: <Product />,
           },
         ],
       },
