@@ -8,15 +8,23 @@ import Loading from "../../../common/Loading";
 
 interface RecommendProductsProps {
   itemId: number;
+  productId?: number;
 }
 
-const RecommendProducts: React.FC<RecommendProductsProps> = ({ itemId }) => {
+const RecommendProducts: React.FC<RecommendProductsProps> = ({
+  itemId,
+  productId,
+}) => {
   const { data, isLoading } = useQuery({
     queryKey: ["item", itemId],
     queryFn: () => itemService.getItem(itemId),
   });
 
-  const products = data?.payload?.products.slice(0, 3);
+  const allProducts = data?.payload?.products.filter(
+    (product) => product.productId !== productId,
+  );
+
+  const products = allProducts?.slice(0, 3);
 
   if (isLoading) return <Loading />;
 
