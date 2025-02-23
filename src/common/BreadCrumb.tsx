@@ -19,7 +19,6 @@ const BreadCrumb: React.FC<BreadCrumbProps> = ({ children }) => {
 
   return (
     <Breadcrumb
-      className="container mx-auto mb-0 px-5 text-xl transition-all duration-200 sm:px-10 xl:px-20"
       style={{
         fontFamily: "Calibri",
         fontSize: "16px",

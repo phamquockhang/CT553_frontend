@@ -26,7 +26,7 @@ const Product: React.FC = () => {
   }
 
   return (
-    <div className="container mx-auto grid max-w-7xl px-5 py-6 shadow-lg transition-all duration-200 sm:px-10 md:grid-cols-4 xl:px-20">
+    <div className="container mx-auto grid max-w-7xl px-5 py-6 shadow-lg transition-all duration-200 sm:px-10 md:grid-cols-4 xl:px-0">
       <div className="flex space-x-4 md:col-span-3">
         {productData ? (
           <>
@@ -103,7 +103,7 @@ const Product: React.FC = () => {
         )}
       </div>
 
-      <div className="bg-red-50">
+      <div className="ml-4 bg-slate-100 shadow-[0px_0px_5px_1px_rgba(0,0,0,0.24)]">
         <RecommendProducts
           itemId={productData?.itemId ?? 1}
           productId={productId}

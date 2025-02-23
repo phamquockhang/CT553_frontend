@@ -25,10 +25,10 @@ const BestSellerallProducts: React.FC = () => {
   window.scrollTo(0, 0);
 
   return (
-    <div>
+    <>
       <BreadCrumb children="Các sản phẩm bán chạy" />
 
-      <div className="container mx-auto px-5 transition-all duration-200 sm:px-10 xl:px-20">
+      <>
         {allProducts && (
           <div className="my-10">
             <div className="mb-2 flex items-center justify-between">
@@ -42,8 +42,8 @@ const BestSellerallProducts: React.FC = () => {
             </div>
           </div>
         )}
-      </div>
-    </div>
+      </>
+    </>
   );
 };
 

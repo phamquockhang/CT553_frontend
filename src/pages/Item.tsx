@@ -29,10 +29,10 @@ const Item: React.FC = () => {
   window.scrollTo(0, 0);
 
   return (
-    <div>
+    <>
       <BreadCrumb children={data?.payload?.itemName} />
 
-      <div className="container mx-auto px-5 transition-all duration-200 sm:px-10 xl:px-20">
+      <>
         {productsData && (
           <div className="my-10">
             <div className="mb-2 flex items-center justify-between">
@@ -46,8 +46,8 @@ const Item: React.FC = () => {
             </div>
           </div>
         )}
-      </div>
-    </div>
+      </>
+    </>
   );
 };
 
