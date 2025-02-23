@@ -98,7 +98,7 @@ const BoxSearch: React.FC = () => {
         addonBefore={<IoIosSearch className="text-2xl" />}
         allowClear
         placeholder="Tìm kiếm sản phẩm..."
-        className="w-80 p-2 focus:outline-none focus:ring-0"
+        className="w-64 focus:outline-none focus:ring-0"
         value={transcript}
         onChange={handleInputChange}
         onPressEnter={handleKeyPress} // Khi nhấn Enter
