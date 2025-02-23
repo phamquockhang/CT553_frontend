@@ -17,8 +17,10 @@ const OverviewProductInCart = React.memo(
     };
 
     const handleDeltaChange = (delta: number) => {
-      const temp = quantity + delta;
+      let temp = quantity + delta;
+      temp = Math.round(temp * 10) / 10;
       const newQuantity = temp < 1 ? 1 : temp > 100 ? 100 : temp;
+
       updateQuantity(product.productId, newQuantity);
     };
 
@@ -45,12 +47,30 @@ const OverviewProductInCart = React.memo(
           className="centered-input"
           controls={false}
           addonBefore={
-            <button onClick={() => handleDeltaChange(-1)} className="px-4 py-3">
+            <button
+              onClick={() => {
+                if (product.productUnit === "kg") {
+                  handleDeltaChange(-0.1);
+                } else {
+                  handleDeltaChange(-1);
+                }
+              }}
+              className="px-4 py-3"
+            >
               -
             </button>
           }
           addonAfter={
-            <button onClick={() => handleDeltaChange(1)} className="px-4 py-3">
+            <button
+              onClick={() => {
+                if (product.productUnit === "kg") {
+                  handleDeltaChange(0.1);
+                } else {
+                  handleDeltaChange(1);
+                }
+              }}
+              className="px-4 py-3"
+            >
               +
             </button>
           }

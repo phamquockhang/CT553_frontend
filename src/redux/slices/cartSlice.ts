@@ -52,7 +52,10 @@ const cartSlice = createSlice({
       );
       if (product) {
         product.quantity = action.payload.quantity;
-        state.totalAmount = product.quantity * product.price;
+        state.totalAmount = state.products.reduce(
+          (acc, prod) => acc + prod.quantity * prod.price,
+          0,
+        );
       }
     },
 

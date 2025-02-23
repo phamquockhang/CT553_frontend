@@ -27,8 +27,6 @@ const Cart: React.FC = () => {
   });
   const products = data ? data.flatMap((result) => result.payload || []) : [];
 
-  console.log(products);
-
   function updateQuantityShoppingCart(id: number, quantity: number) {
     cartDispatch(
       updateQuantity({
