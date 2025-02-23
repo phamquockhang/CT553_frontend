@@ -3,13 +3,11 @@ import { Button, Input, Skeleton } from "antd";
 import { useNavigate } from "react-router-dom";
 import BreadCrumb from "../common/BreadCrumb";
 import OverviewProductInCart from "../features/category/products/OverviewProductInCart";
+import BestSellers from "../features/components/home/BestSellers";
 import useCartData from "../redux";
 import { removeProduct, updateQuantity } from "../redux/slices/cartSlice";
 import { productService } from "../services";
 import { useDynamicTitle } from "../utils";
-import RecommendProducts from "../features/category/products/RecommendProducts";
-import BestSellerProducts from "./BestSellerProducts";
-import BestSellers from "../features/components/home/BestSellers";
 
 const Cart: React.FC = () => {
   useDynamicTitle("Giỏ hàng");

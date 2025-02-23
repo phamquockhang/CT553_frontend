@@ -1,3 +1,4 @@
+import { InputNumber } from "antd";
 import React from "react";
 import { IProduct } from "../../../interfaces";
 
@@ -10,6 +11,17 @@ interface ProductItemProps {
 
 const OverviewProductInCart = React.memo(
   ({ product, quantity, updateQuantity, removeProduct }: ProductItemProps) => {
+    const handleDirectChange = (value: number | null) => {
+      const newQuantity = value ?? 1;
+      updateQuantity(product.productId, newQuantity);
+    };
+
+    const handleDeltaChange = (delta: number) => {
+      const temp = quantity + delta;
+      const newQuantity = temp < 1 ? 1 : temp > 100 ? 100 : temp;
+      updateQuantity(product.productId, newQuantity);
+    };
+
     return (
       <div className="flex items-center border-b py-4">
         <img
@@ -25,21 +37,34 @@ const OverviewProductInCart = React.memo(
             {product.productUnit}
           </p>
         </div>
-        <div className="flex items-center">
-          <button
-            onClick={() => updateQuantity(product.productId, -1)}
-            className="rounded-l border bg-gray-100 px-3 py-1"
-          >
-            -
-          </button>
-          <span className="px-4">{quantity}</span>
-          <button
-            onClick={() => updateQuantity(product.productId, 1)}
-            className="rounded-r border bg-gray-100 px-3 py-1"
-          >
-            +
-          </button>
-        </div>
+
+        <InputNumber
+          size="large"
+          min={1}
+          max={100}
+          className="centered-input"
+          controls={false}
+          addonBefore={
+            <button onClick={() => handleDeltaChange(-1)} className="px-4 py-3">
+              -
+            </button>
+          }
+          addonAfter={
+            <button onClick={() => handleDeltaChange(1)} className="px-4 py-3">
+              +
+            </button>
+          }
+          style={{ width: 150 }}
+          value={quantity}
+          onChange={(value) => {
+            if (typeof value === "number") {
+              handleDirectChange(value);
+            } else {
+              handleDirectChange(1);
+            }
+          }}
+        />
+
         <p className="ml-6 min-w-32 text-center font-semibold text-[#003F8F]">
           {(product.sellingPrice.sellingPriceValue * quantity).toLocaleString()}
           đ

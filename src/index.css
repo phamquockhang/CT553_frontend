@@ -152,4 +152,12 @@
     font-size: 14px;
     font-style: normal;
   }
+
+  .centered-input .ant-input-number-input {
+    text-align: center !important;
+  }
+
+  .centered-input .ant-input-number-group-addon {
+    padding: 0 !important;
+  }
 }

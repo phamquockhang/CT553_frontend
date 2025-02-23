@@ -51,12 +51,7 @@ const cartSlice = createSlice({
         (product) => product.productId === action.payload.id,
       );
       if (product) {
-        if (product.quantity === 1 && action.payload.quantity === -1) {
-          product.quantity = 1;
-        } else {
-          product.quantity += action.payload.quantity;
-        }
-
+        product.quantity = action.payload.quantity;
         state.totalAmount = product.quantity * product.price;
       }
     },
