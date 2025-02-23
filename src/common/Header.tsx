@@ -12,7 +12,7 @@ import { AiFillLike } from "react-icons/ai";
 import { FaShippingFast } from "react-icons/fa";
 import { MdOutlinePublishedWithChanges } from "react-icons/md";
 import { PiCodesandboxLogoBold } from "react-icons/pi";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import useStickyScroll from "../features/components/hooks/useStickyScroll";
 import { ICustomer, IStaff, PRIMARY_COLOR } from "../interfaces";
 import { customerService, itemService, staffService } from "../services";
@@ -28,8 +28,8 @@ const Header: React.FC = () => {
   const accessToken = localStorage.getItem("access_token");
   const isSticky = useStickyScroll();
 
-  const currentPath = window.location.pathname;
-  const pathParts = currentPath.split("/");
+  const location = useLocation();
+  const pathParts = location.pathname.split("/");
 
   // console.log(pathParts[pathParts.length - 1]);
 
@@ -37,7 +37,6 @@ const Header: React.FC = () => {
     queryKey: ["allItems"],
     queryFn: itemService.getAllItems,
   });
-  // console.log(data);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -79,7 +78,7 @@ const Header: React.FC = () => {
     {
       key: "items",
       title: "Các mặt hàng của chúng tôi",
-      href: "/items",
+      href: "#",
       submenu: data?.payload?.map((item) => ({
         title: item.itemName,
         href: `/items/${item.itemId}`,
@@ -182,13 +181,13 @@ const Header: React.FC = () => {
 
         {/* Right Side Menus */}
         <div className="flex items-center">
-          {/* <Search /> */}
           <BoxSearch />
+          <ShoppingCart />
           <Divider type="vertical" className="h-6 bg-black" />
           {showAccountMenu ? (
             <>
+              {/* <ShoppingCart /> */}
               <AccountMenu />
-              <ShoppingCart />
             </>
           ) : (
             <>

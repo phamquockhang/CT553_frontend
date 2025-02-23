@@ -3,10 +3,14 @@ import { Breadcrumb } from "antd";
 import { itemService } from "../services";
 
 interface BreadCrumbProps {
+  displayMenu?: boolean;
   children?: string;
 }
 
-const BreadCrumb: React.FC<BreadCrumbProps> = ({ children }) => {
+const BreadCrumb: React.FC<BreadCrumbProps> = ({
+  displayMenu = true,
+  children,
+}) => {
   const { data: allItems } = useQuery({
     queryKey: ["allItems"],
     queryFn: itemService.getAllItems,
@@ -19,25 +23,38 @@ const BreadCrumb: React.FC<BreadCrumbProps> = ({ children }) => {
 
   return (
     <Breadcrumb
-      className="container mx-auto mb-0 px-5 text-xl transition-all duration-200 sm:px-10 xl:px-20"
-      style={{
-        fontFamily: "Calibri",
-        fontSize: "16px",
-        fontWeight: 600,
-        color: "#003F8F",
-      }}
-      items={[
-        {
-          title: "Trang chủ",
-        },
-        {
-          title: "Các sản phẩm của chúng tôi",
-          menu: { items: menuItems?.filter((item) => item !== null) },
-        },
-        {
-          title: children,
-        },
-      ]}
+      className="rounded-lg p-2 text-base font-semibold transition-all duration-200 hover:bg-slate-200"
+      // style={{
+      //   fontFamily: "Calibri",
+      // }}
+      items={
+        displayMenu
+          ? [
+              {
+                title: "Trang chủ",
+                href: "/",
+              },
+              {
+                title: "Các sản phẩm của chúng tôi",
+                className: "cursor-pointer",
+                menu: { items: menuItems?.filter((item) => item !== null) },
+              },
+              {
+                title: children,
+                className: "cursor-pointer text-blue-900",
+              },
+            ]
+          : [
+              {
+                title: "Trang chủ",
+                href: "/",
+              },
+              {
+                title: children,
+                className: "cursor-pointer text-blue-900",
+              },
+            ]
+      }
     />
   );
 };

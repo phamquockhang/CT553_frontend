@@ -5,10 +5,11 @@ import OverviewProduct from "../features/category/products/OverviewProduct";
 import { IProduct } from "../interfaces";
 import { itemService } from "../services";
 import { useDynamicTitle } from "../utils";
+import { useLocation } from "react-router-dom";
 
 const Item: React.FC = () => {
-  const currentPath = window.location.pathname;
-  const pathParts = currentPath.split("/");
+  const location = useLocation();
+  const pathParts = location.pathname.split("/");
   const itemId = parseInt(pathParts[pathParts.length - 1]);
 
   const { data, isLoading: isItemLoading } = useQuery({
@@ -29,12 +30,12 @@ const Item: React.FC = () => {
   window.scrollTo(0, 0);
 
   return (
-    <div>
+    <>
       <BreadCrumb children={data?.payload?.itemName} />
 
-      <div className="container mx-auto px-5 transition-all duration-200 sm:px-10 xl:px-20">
+      <>
         {productsData && (
-          <div className="my-10">
+          <div className="my-5">
             <div className="mb-2 flex items-center justify-between">
               <h2 className="text-2xl font-bold">{data?.payload?.itemName}</h2>
             </div>
@@ -46,8 +47,8 @@ const Item: React.FC = () => {
             </div>
           </div>
         )}
-      </div>
-    </div>
+      </>
+    </>
   );
 };
 

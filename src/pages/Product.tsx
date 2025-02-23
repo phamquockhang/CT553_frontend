@@ -25,8 +25,10 @@ const Product: React.FC = () => {
     return <Loading />;
   }
 
+  window.scrollTo(0, 0);
+
   return (
-    <div className="container mx-auto grid max-w-7xl px-5 py-6 shadow-lg transition-all duration-200 sm:px-10 md:grid-cols-4 xl:px-20">
+    <div className="container mx-auto grid max-w-7xl px-5 py-6 shadow-lg transition-all duration-200 sm:px-10 md:grid-cols-4 xl:px-0">
       <div className="flex space-x-4 md:col-span-3">
         {productData ? (
           <>
@@ -62,7 +64,7 @@ const Product: React.FC = () => {
 
               <ul className="list-disc pl-4 text-lg text-gray-700">
                 <p>🔥 Hàng Tươi Sống Giao Nhanh 2H</p>
-                <p>🎁 Tặng 100,000đ Khi Đăng Ký Thành Viên</p>
+                <p>🎁 Tặng 10,000 Điểm Tích Lũy Khi Đăng Ký Thành Viên</p>
                 <p>👍 Cam Kết 1 Đổi 1 Nếu Không Đạt Chất Lượng</p>
                 <p>
                   🚫 Không Dùng Hàng Ngộp - Không Dùng Hàng Đông Lạnh Chế Biến
@@ -86,8 +88,8 @@ const Product: React.FC = () => {
                 </div>
                 <ul className="list-disc p-4 pb-2 text-sm text-gray-700">
                   <p>🎁 Tặng Sốt chấm muối ớt hồng & xanh độc quyền</p>
-                  <p>🎁 Tặng 100,000đ khi đăng ký khách hàng</p>
-                  <p>🔥 Ưu Đãi Thành Viên Lên Đến 10%</p>
+                  <p>🎁 Tặng Thêm 10,000 Điểm Tích Lũy</p>
+                  <p>🔥 Ưu Đãi Thành Viên Lên Đến 5%</p>
                 </ul>
               </div>
 
@@ -103,7 +105,7 @@ const Product: React.FC = () => {
         )}
       </div>
 
-      <div className="bg-red-50">
+      <div className="ml-4 bg-slate-100 shadow-[0px_0px_5px_1px_rgba(0,0,0,0.24)]">
         <RecommendProducts
           itemId={productData?.itemId ?? 1}
           productId={productId}

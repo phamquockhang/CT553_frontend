@@ -63,8 +63,8 @@ const Search: React.FC = () => {
       <h2 className="text-center text-3xl font-semibold">Tìm kiếm</h2>
       <p className="text-center text-gray-600">
         {products
-          ? `Tìm thấy ${products.length} sản phẩm`
-          : "Không tìm thấy sản phẩm nào"}
+          ? `Tìm thấy ${products.length} sản phẩm cho từ khóa "${query}"`
+          : `Không tìm thấy sản phẩm nào cho từ khóa "${query}"`}
       </p>
 
       <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
