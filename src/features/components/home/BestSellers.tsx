@@ -23,7 +23,7 @@ const BestSellers: React.FC = () => {
   return (
     <>
       {products && (
-        <div className="my-10">
+        <div className="my-5">
           <div className="mb-2 flex items-center justify-between">
             <h2 className="text-2xl font-bold">Các sản phẩm bán chạy</h2>
             <Link
