@@ -5,10 +5,11 @@ import OverviewProduct from "../features/category/products/OverviewProduct";
 import { IProduct } from "../interfaces";
 import { itemService } from "../services";
 import { useDynamicTitle } from "../utils";
+import { useLocation } from "react-router-dom";
 
 const Item: React.FC = () => {
-  const currentPath = window.location.pathname;
-  const pathParts = currentPath.split("/");
+  const location = useLocation();
+  const pathParts = location.pathname.split("/");
   const itemId = parseInt(pathParts[pathParts.length - 1]);
 
   const { data, isLoading: isItemLoading } = useQuery({
