@@ -6,7 +6,7 @@ import { IProduct } from "../interfaces";
 import { productService } from "../services";
 import { useDynamicTitle } from "../utils";
 
-const BestSellerallProducts: React.FC = () => {
+const BestSellerProducts: React.FC = () => {
   useDynamicTitle("Các sản phẩm bán chạy");
 
   const { data: bestSellerProducts, isLoading: isLoadingBestSellerProducts } =
@@ -47,4 +47,4 @@ const BestSellerallProducts: React.FC = () => {
   );
 };
 
-export default BestSellerallProducts;
+export default BestSellerProducts;

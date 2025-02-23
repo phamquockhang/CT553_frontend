@@ -78,7 +78,7 @@ const Header: React.FC = () => {
     {
       key: "items",
       title: "Các mặt hàng của chúng tôi",
-      href: "/items",
+      href: "#",
       submenu: data?.payload?.map((item) => ({
         title: item.itemName,
         href: `/items/${item.itemId}`,

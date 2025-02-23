@@ -8,6 +8,7 @@ import BestSellerProducts from "../pages/BestSellerProducts";
 import Product from "../pages/Product";
 import Item from "../pages/Item";
 import Search from "../pages/Search";
+import Cart from "../pages/Cart";
 
 const router = createBrowserRouter([
   {
@@ -60,6 +61,10 @@ const router = createBrowserRouter([
       {
         path: "search",
         element: <Search />,
+      },
+      {
+        path: "cart",
+        element: <Cart />,
       },
     ],
   },
