@@ -23,7 +23,7 @@ const Cart: React.FC = () => {
         productsId.map((id) => productService.getProduct(id)),
       );
     },
-    enabled: !!productsId?.length, // Chỉ chạy khi có productsId
+    enabled: !!productsId?.length,
   });
   const products = data ? data.flatMap((result) => result.payload || []) : [];
 
