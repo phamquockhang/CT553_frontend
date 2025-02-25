@@ -48,7 +48,7 @@ const Search: React.FC = () => {
       if (!itemsId || itemsId.length === 0) return [];
       return await Promise.all(itemsId.map((id) => itemService.getItem(id)));
     },
-    enabled: !!itemsId?.length, // Chỉ chạy khi có itemsId
+    enabled: !!itemsId?.length,
   });
   const products = searchResults?.flatMap(
     (result) => result.payload?.products || [],

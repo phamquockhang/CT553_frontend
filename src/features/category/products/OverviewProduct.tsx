@@ -45,19 +45,19 @@ const OverviewProduct: React.FC<OverviewProductProps> = ({ product }) => {
     );
     if (productImageElement) {
       const rect = productImageElement.getBoundingClientRect();
-      const startX = rect.left;
-      const startY = rect.top;
+      const startX = rect.left + rect.width / 4;
+      const startY = rect.top + rect.height / 4;
 
       // vị trí đích của icon giỏ hàng tính toán từ DOM
       const cartIconElement = document.getElementById("cart-icon");
       if (cartIconElement) {
         const cartRect = cartIconElement.getBoundingClientRect();
+        console.log(cartRect);
         const endX = cartRect.left - 25;
-        const endY = cartRect.top - 25;
-        // const endX = cartRect.left + cartRect.width / 2;
-        // const endY = cartRect.top + cartRect.height / 2;
-        // const endX = cartRect.x;
-        // const endY = cartRect.y;
+        const endY = cartRect.top - 25 < 0 ? -50 : cartRect.top - 25;
+        console.log(endX, endY);
+        // const endX = cartRect.left + cartRect.width / 4;
+        // const endY = cartRect.top + cartRect.height / 4;
 
         // Sử dụng endX, endY làm tọa độ đích cho hiệu ứng bay
         setFloatingData({
