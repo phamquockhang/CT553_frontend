@@ -35,8 +35,9 @@ const Product: React.FC = () => {
             <div className="w-1/2">
               <img
                 src={
-                  productData?.productImages[0].imageUrl ||
-                  "https://placehold.co/400"
+                  productData?.productImages[0]?.imageUrl
+                    ? productData.productImages[0].imageUrl
+                    : "https://placehold.co/400"
                 }
                 alt={productData?.productName}
                 className="h-auto w-full rounded-lg shadow-[0px_0px_5px_1px_rgba(0,0,0,0.24)]"
