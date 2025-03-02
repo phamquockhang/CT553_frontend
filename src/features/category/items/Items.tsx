@@ -1,13 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
-import { Link, useSearchParams } from "react-router-dom";
-import {
-  IProduct,
-  ProductFilterCriteria,
-  SortParams,
-} from "../../../interfaces";
-import { use } from "react";
-import { itemService, productService } from "../../../services";
 import { FaArrowRightLong } from "react-icons/fa6";
+import { Link } from "react-router-dom";
+import { IProduct } from "../../../interfaces";
+import { itemService } from "../../../services";
 import OverviewProduct from "../products/OverviewProduct";
 
 interface ItemsProps {

@@ -1,9 +1,10 @@
 import { InputNumber, Space } from "antd";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { IProduct } from "../../../interfaces";
+import { ICustomer, IProduct } from "../../../interfaces";
 import useCartData from "../../../redux";
 import { addProduct } from "../../../redux/slices/cartSlice";
+import { AddProductToCart } from "../../../services";
 
 interface ProductOderProps {
   product?: IProduct;
@@ -12,17 +13,53 @@ interface ProductOderProps {
 const ProductOder: React.FC<ProductOderProps> = ({ product }) => {
   const [quantity, setQuantity] = useState<number>(1);
   const { cartDispatch } = useCartData();
+  const customer: ICustomer | null = JSON.parse(
+    localStorage.getItem("customer") || "null",
+  );
+  const cartId = customer?.cart.cartId;
+  const { addProductToCart } = AddProductToCart();
 
   const handleAddToCart = () => {
     if (product?.productId) {
-      cartDispatch(
-        addProduct({
-          productId: product.productId,
-          price: product.sellingPrice.sellingPriceValue,
-          quantity: quantity,
-        }),
-      );
-      toast.success("Đã thêm sản phẩm vào giỏ hàng");
+      if (cartId) {
+        addProductToCart(
+          {
+            cartId: cartId,
+            cartDetails: [
+              {
+                productId: product.productId,
+                quantity: quantity,
+              },
+            ],
+          },
+          {
+            onSuccess: (data) => {
+              const newCartDetail = data.payload?.find(
+                (cartDetail) => cartDetail.productId === product.productId,
+              );
+              cartDispatch(
+                addProduct({
+                  cartDetailId: newCartDetail?.cartDetailId,
+                  productId: product.productId,
+                  quantity: quantity,
+                }),
+              );
+              toast.success("Đã thêm sản phẩm vào giỏ hàng");
+            },
+            onError: () => {
+              toast.error("Có lỗi xảy ra khi thêm sản phẩm vào giỏ hàng");
+            },
+          },
+        );
+      } else {
+        cartDispatch(
+          addProduct({
+            productId: product.productId,
+            quantity: quantity,
+          }),
+        );
+        toast.success("Đã thêm sản phẩm vào giỏ hàng");
+      }
     } else {
       console.error("Product ID is missing");
       toast.error("Có lỗi xảy ra khi thêm sản phẩm vào giỏ hàng");

@@ -4,17 +4,37 @@ import { useNavigate } from "react-router-dom";
 import BreadCrumb from "../common/BreadCrumb";
 import OverviewProductInCart from "../features/category/products/OverviewProductInCart";
 import BestSellers from "../features/components/home/BestSellers";
+import { ICustomer } from "../interfaces";
 import useCartData from "../redux";
 import { removeProduct, updateQuantity } from "../redux/slices/cartSlice";
-import { productService } from "../services";
+import {
+  DeleteCartDetail,
+  productService,
+  UpdateCartDetail,
+} from "../services";
 import { useDynamicTitle } from "../utils";
 
 const Cart: React.FC = () => {
   useDynamicTitle("Giỏ hàng");
-  const { cartProducts, cartDispatch } = useCartData();
+  const customer: ICustomer | null = JSON.parse(
+    localStorage.getItem("customer") || "null",
+  );
+  const cart = customer?.cart;
+
+  function findCartDetailId(productId: number) {
+    return cart?.cartDetails.find(
+      (cartDetail) => cartDetail.productId === productId,
+    )?.cartDetailId;
+  }
+
+  const { updateCartDetail } = UpdateCartDetail();
+  const { deleteCartDetail } = DeleteCartDetail();
+
+  const { cartState, cartDispatch } = useCartData();
   const navigate = useNavigate();
 
-  const productsId = cartProducts.products.map((product) => product.productId);
+  const productsId = cartState.cartDetails.map((product) => product.productId);
+  // console.log("productsId", productsId);
   const { data } = useQuery({
     queryKey: ["productsInCart", productsId],
     queryFn: async () => {
@@ -23,26 +43,41 @@ const Cart: React.FC = () => {
         productsId.map((id) => productService.getProduct(id)),
       );
     },
-    enabled: !!productsId?.length,
+    enabled: productsId?.length > 0,
   });
   const products = data ? data.flatMap((result) => result.payload || []) : [];
 
-  function updateQuantityShoppingCart(id: number, quantity: number) {
+  function updateQuantityShoppingCart(productId: number, quantity: number) {
+    const cartDetailId = findCartDetailId(productId);
+    console.log("cartDetailId", cartDetailId);
+    if (cartDetailId) {
+      updateCartDetail({
+        cartDetailId,
+        productId,
+        quantity,
+      });
+    }
+
     cartDispatch(
       updateQuantity({
-        id,
+        id: productId,
         quantity,
       }),
     );
   }
 
   function removeProductShoppingCart(id: number) {
+    const cartDetailId = findCartDetailId(id);
+    if (cartDetailId) {
+      deleteCartDetail(cartDetailId);
+    }
+
     cartDispatch(removeProduct(id));
   }
 
   const total =
     products.length > 0 &&
-    cartProducts.products.reduce(
+    cartState.cartDetails.reduce(
       (acc, product, index) =>
         acc + product.quantity * products[index].sellingPrice.sellingPriceValue,
       0,
@@ -60,11 +95,11 @@ const Cart: React.FC = () => {
         Giỏ hàng của bạn
       </h1>
       <p className="mt-2 text-center text-gray-600">
-        Có {cartProducts.products.length} sản phẩm trong giỏ hàng
+        Có {cartState.cartDetails.length} sản phẩm trong giỏ hàng
       </p>
       <div className="mx-auto my-4 h-1 w-20 bg-gray-800"></div>
 
-      {cartProducts.products.length === 0 ? (
+      {cartState.cartDetails.length === 0 ? (
         <>
           <p className="text-center text-gray-500">
             Giỏ hàng của bạn đang trống
@@ -89,7 +124,7 @@ const Cart: React.FC = () => {
                   <OverviewProductInCart
                     key={product.productId}
                     product={product}
-                    quantity={cartProducts.products[index].quantity}
+                    quantity={cartState.cartDetails[index].quantity}
                     updateQuantity={updateQuantityShoppingCart}
                     removeProduct={removeProductShoppingCart}
                   />
@@ -110,7 +145,7 @@ const Cart: React.FC = () => {
               <h3 className="text-lg font-semibold">
                 Tổng tiền:{" "}
                 <span className="text-xl text-black">
-                  {total?.toLocaleString()}đ
+                  {total ? total?.toLocaleString() : 0}đ
                 </span>
               </h3>
               <div className="flex gap-3">

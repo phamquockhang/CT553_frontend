@@ -20,14 +20,21 @@ const OverviewProductInCart = React.memo(
       let temp = quantity + delta;
       temp = Math.round(temp * 10) / 10;
       const newQuantity = temp < 1 ? 1 : temp > 100 ? 100 : temp;
-
       updateQuantity(product.productId, newQuantity);
+    };
+
+    const handleRemoveProduct = () => {
+      removeProduct(product.productId);
     };
 
     return (
       <div className="flex items-center border-b py-4">
         <img
-          src={product.productImages[0].imageUrl}
+          src={
+            product?.productImages[0]?.imageUrl
+              ? product.productImages[0].imageUrl
+              : "https://placehold.co/400"
+          }
           alt={product.productName}
           className="h-20 w-20 rounded"
         />
@@ -90,7 +97,7 @@ const OverviewProductInCart = React.memo(
           đ
         </p>
         <button
-          onClick={() => removeProduct(product.productId)}
+          onClick={handleRemoveProduct}
           className="ml-4 text-gray-500 hover:text-red-500"
         >
           ✖

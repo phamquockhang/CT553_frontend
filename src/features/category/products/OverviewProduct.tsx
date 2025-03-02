@@ -1,10 +1,11 @@
+import { useState } from "react";
+import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import { IProduct } from "../../../interfaces";
+import FloatingImage from "../../../common/components/FloatingImage";
+import { ICustomer, IProduct } from "../../../interfaces";
 import useCartData from "../../../redux";
 import { addProduct } from "../../../redux/slices/cartSlice";
-import toast from "react-hot-toast";
-import FloatingImage from "../../../common/components/FloatingImage";
-import { useState } from "react";
+import { AddProductToCart } from "../../../services";
 
 interface OverviewProductProps {
   product: IProduct;
@@ -20,6 +21,11 @@ const OverviewProduct: React.FC<OverviewProductProps> = ({ product }) => {
     endX: number;
     endY: number;
   } | null>(null);
+  const customer: ICustomer | null = JSON.parse(
+    localStorage.getItem("customer") || "null",
+  );
+  const cartId = customer?.cart && customer?.cart.cartId;
+  const { addProductToCart: addProductToCartService } = AddProductToCart();
 
   const handleAnimationEnd = () => {
     setFloatingData(null);
@@ -30,15 +36,44 @@ const OverviewProduct: React.FC<OverviewProductProps> = ({ product }) => {
     productId: number,
   ) {
     event.stopPropagation();
-    cartDispatch(
-      addProduct({
-        productId: productId,
-        price: product.sellingPrice.sellingPriceValue,
-        quantity: 1,
-      }),
-    );
-    toast.success("Đã thêm sản phẩm vào giỏ hàng");
-
+    if (cartId) {
+      console.log("cartId", cartId);
+      addProductToCartService(
+        {
+          cartId: cartId,
+          cartDetails: [
+            {
+              productId: productId,
+              quantity: 1,
+            },
+          ],
+        },
+        {
+          onSuccess: (data) => {
+            const newCartDetail = data.payload?.find(
+              (cartDetail) => cartDetail.productId === productId,
+            );
+            cartDispatch(
+              addProduct({
+                cartDetailId: newCartDetail?.cartDetailId,
+                productId: productId,
+                quantity: 1,
+              }),
+            );
+            toast.success("Đã thêm sản phẩm vào giỏ hàng");
+          },
+        },
+      );
+    } else {
+      console.log("cartId", cartId);
+      cartDispatch(
+        addProduct({
+          productId: productId,
+          quantity: 1,
+        }),
+      );
+      toast.success("Đã thêm sản phẩm vào giỏ hàng");
+    }
     // lấy ảnh sp
     const productImageElement = document.getElementById(
       `product-image-${product.productId}`,
@@ -52,10 +87,10 @@ const OverviewProduct: React.FC<OverviewProductProps> = ({ product }) => {
       const cartIconElement = document.getElementById("cart-icon");
       if (cartIconElement) {
         const cartRect = cartIconElement.getBoundingClientRect();
-        console.log(cartRect);
+        // console.log(cartRect);
         const endX = cartRect.left - 25;
         const endY = cartRect.top - 25 < 0 ? -50 : cartRect.top - 25;
-        console.log(endX, endY);
+        // console.log(endX, endY);
         // const endX = cartRect.left + cartRect.width / 4;
         // const endY = cartRect.top + cartRect.height / 4;
 

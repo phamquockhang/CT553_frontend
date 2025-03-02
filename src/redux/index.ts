@@ -2,10 +2,10 @@ import { useAppDispatch, useAppSelector } from "./hooks";
 import { RootState } from "./store";
 
 const useCartData = () => {
-  const cartProducts = useAppSelector((state: RootState) => state.cart);
+  const cartState = useAppSelector((state: RootState) => state.cart);
   const cartDispatch = useAppDispatch();
 
-  return { cartProducts, cartDispatch };
+  return { cartState, cartDispatch };
 };
 
 export default useCartData;

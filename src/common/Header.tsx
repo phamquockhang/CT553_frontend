@@ -40,26 +40,32 @@ const Header: React.FC = () => {
 
   useEffect(() => {
     const fetchUserData = async () => {
-      if (accessToken) {
-        try {
-          const customerResponse = await customerService.getLoggedInCustomer();
-          const staffResponse = await staffService.getLoggedInStaff();
-
-          const userData = customerResponse.success
-            ? customerResponse.payload
-            : staffResponse.success
-              ? staffResponse.payload
-              : null;
-
-          if (userData) {
-            setUser(userData);
-            setShowAccountMenu(true);
-          }
-        } catch (error) {
-          console.error("Failed to fetch user data:", error);
-        }
-      } else {
+      if (!accessToken) {
         setShowAccountMenu(false);
+        return;
+      }
+
+      try {
+        // Thử lấy thông tin customer trước
+        // console.log("Fetching customer...");
+        const customerResponse = await customerService.getLoggedInCustomer();
+        if (customerResponse.success && customerResponse.payload) {
+          // console.log("Customer found:", customerResponse.payload);
+          setUser(customerResponse.payload);
+          setShowAccountMenu(true);
+          return; // Dừng luôn, không gọi staff API
+        }
+
+        // Nếu customer API không thành công, thử gọi staff API
+        // console.log("Fetching staff...");
+        const staffResponse = await staffService.getLoggedInStaff();
+        if (staffResponse.success && staffResponse.payload) {
+          // console.log("Staff found:", staffResponse.payload);
+          setUser(staffResponse.payload);
+          setShowAccountMenu(true);
+        }
+      } catch (error) {
+        console.error("Failed to fetch user data:", error);
       }
     };
 

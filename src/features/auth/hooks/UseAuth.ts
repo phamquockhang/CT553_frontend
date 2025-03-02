@@ -47,9 +47,10 @@ export const useLogout = () => {
     mutationFn: () => authService.logout(),
     onSuccess: () => {
       window.localStorage.removeItem("access_token");
+      window.localStorage.removeItem("customer");
       queryClient.removeQueries({
         predicate: (query) => {
-          return query.queryKey.includes("user");
+          return query.queryKey.includes(["customer", "logged-in"]);
         },
       });
       navigate("/");
