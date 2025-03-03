@@ -42,7 +42,7 @@ class ProductService implements IProductService {
     filter?: ProductFilterCriteria,
     sort?: SortParams,
   ): Promise<ApiResponse<Page<IProduct>>> {
-    return await apiClient.get("", {
+    return await apiClient.get("/public", {
       params: {
         ...pagination,
         ...filter,

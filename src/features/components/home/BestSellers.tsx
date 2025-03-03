@@ -2,18 +2,18 @@ import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import { FaArrowRightLong } from "react-icons/fa6";
 import { Link } from "react-router-dom";
-import { itemService, productService } from "../../../services";
+import { productService } from "../../../services";
 import OverviewProduct from "../../category/products/OverviewProduct";
 import useSearchProductParams from "../../category/products/hooks/useSearchProductParams";
 
 const BestSellers: React.FC = () => {
   const { paginationParams, query, filter, sort } = useSearchProductParams();
 
-  const { data: itemData } = useQuery({
-    queryKey: ["allItems"],
-    queryFn: () => itemService.getAllItems(),
-    select: (data) => data?.payload?.filter((item) => item.isActivated),
-  });
+  // const { data: itemData } = useQuery({
+  //   queryKey: ["allItems"],
+  //   queryFn: () => itemService.getAllItems(),
+  //   select: (data) => data?.payload?.filter((item) => item.isActivated),
+  // });
 
   const { data, isLoading: isLoadingProducts } = useQuery({
     queryKey: ["products", paginationParams, query, filter, sort].filter(
@@ -37,8 +37,8 @@ const BestSellers: React.FC = () => {
 
   const productsData = data?.payload?.data;
   // const productsData = data;
-  console.log(productsData);
-  console.log(itemData);
+  // console.log(productsData);
+  // console.log(itemData);
 
   if (isLoadingProducts) return;
 
