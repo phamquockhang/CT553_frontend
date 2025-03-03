@@ -1,10 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
-import { Pagination, Skeleton } from "antd";
+import { Skeleton } from "antd";
 import { useLocation } from "react-router-dom";
 import BreadCrumb from "../common/BreadCrumb";
+import CustomPagination from "../common/components/CustomPagination";
 import useSearchProductParams from "../features/category/products/hooks/useSearchProductParams";
 import OverviewProduct from "../features/category/products/OverviewProduct";
-import usePagination from "../features/components/hooks/usePagination";
 import { itemService, productService } from "../services";
 import { useDynamicTitle } from "../utils";
 
@@ -15,7 +15,6 @@ const Item: React.FC = () => {
 
   const { paginationParams, query, filter, sort } =
     useSearchProductParams(itemId);
-  const { handlePageChange, itemPaginationRender } = usePagination();
 
   const { data: itemData, isLoading: isItemLoading } = useQuery({
     queryKey: ["allItems"],
@@ -80,17 +79,7 @@ const Item: React.FC = () => {
           <Skeleton.Input active={true} size="default" block={true} />
         </>
       ) : (
-        <Pagination
-          align="center"
-          current={productMeta?.page}
-          pageSize={productMeta?.pageSize}
-          total={productMeta?.total}
-          showSizeChanger
-          showTotal={(total) => `Tổng ${total} sản phẩm`}
-          onChange={handlePageChange}
-          className="pb-10 pt-5"
-          itemRender={itemPaginationRender}
-        />
+        <CustomPagination productMeta={productMeta} showTotal="sản phẩm" />
       )}
     </>
   );

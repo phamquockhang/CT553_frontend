@@ -31,11 +31,10 @@ const Header: React.FC = () => {
   const location = useLocation();
   const pathParts = location.pathname.split("/");
 
-  // console.log(pathParts[pathParts.length - 1]);
-
-  const { data } = useQuery({
+  const { data: allItems } = useQuery({
     queryKey: ["allItems"],
     queryFn: itemService.getAllItems,
+    select: (data) => data.payload?.filter((item) => item.isActivated),
   });
 
   useEffect(() => {
@@ -85,7 +84,7 @@ const Header: React.FC = () => {
       key: "items",
       title: "Các mặt hàng của chúng tôi",
       href: "#",
-      submenu: data?.payload?.map((item) => ({
+      submenu: allItems?.map((item) => ({
         title: item.itemName,
         href: `/items/${item.itemId}`,
         key: `item-${item.itemId}`,

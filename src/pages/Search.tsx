@@ -1,79 +1,77 @@
 import { useQuery } from "@tanstack/react-query";
-import { useSearchParams } from "react-router-dom";
-import Loading from "../common/Loading";
+import { Skeleton } from "antd";
+import CustomPagination from "../common/components/CustomPagination";
+import useSearchProductParams from "../features/category/products/hooks/useSearchProductParams";
 import OverviewProduct from "../features/category/products/OverviewProduct";
-import { ItemFilterCriteria, SortParams } from "../interfaces";
-import { itemService } from "../services";
+import { productService } from "../services";
 import { useDynamicTitle } from "../utils";
 
 const Search: React.FC = () => {
-  const [searchParams] = useSearchParams();
-
-  const pagination = {
-    page: Number(searchParams.get("page")) || 1,
-    pageSize: Number(searchParams.get("pageSize")) || 10,
-  };
-
-  const query = searchParams.get("query") || "";
-
+  const { paginationParams, query, filter, sort } = useSearchProductParams();
   useDynamicTitle(`Tìm kiếm cho: ${query}`);
 
-  const sort: SortParams = {
-    sortBy: searchParams.get("sortBy") || "",
-    direction: searchParams.get("direction") || "",
-  };
-
-  const filter: ItemFilterCriteria = {
-    isActivated: "true",
-  };
-
-  const { data, isLoading, isFetching } = useQuery({
-    queryKey: ["items", pagination, query, sort, filter].filter((key) => {
-      if (typeof key === "string") {
-        return key !== "";
-      } else if (key instanceof Object) {
-        return Object.values(key).some(
-          (value) => value !== undefined && value !== "",
-        );
-      }
-    }),
-    queryFn: () => itemService.getItems(pagination, query, filter, sort),
+  const { data, isLoading: isLoadingProducts } = useQuery({
+    queryKey: ["products", paginationParams, query, filter, sort].filter(
+      (key) => {
+        if (typeof key === "string") {
+          return key !== "";
+        } else if (key instanceof Object) {
+          return Object.values(key).some(
+            (value) => value !== undefined && value !== "",
+          );
+        }
+      },
+    ),
+    queryFn: () =>
+      productService.getProducts(paginationParams, query, filter, sort),
   });
 
-  const itemsId = data?.payload?.data?.map((item) => item.itemId);
+  const productsData = data?.payload?.data;
+  const productMeta = data?.payload?.meta;
 
-  const { data: searchResults, isLoading: isSearching } = useQuery({
-    queryKey: ["itemsDetails", itemsId],
-    queryFn: async () => {
-      if (!itemsId || itemsId.length === 0) return [];
-      return await Promise.all(itemsId.map((id) => itemService.getItem(id)));
-    },
-    enabled: !!itemsId?.length,
-  });
-  const products = searchResults?.flatMap(
-    (result) => result.payload?.products || [],
-  );
-
-  if (isLoading || isFetching || isSearching) {
-    return <Loading />;
-  }
+  window.scrollTo(0, 0);
 
   return (
     <div className="mx-auto max-w-6xl p-4">
-      <h2 className="text-center text-3xl font-semibold">Tìm kiếm</h2>
-      <p className="text-center text-gray-600">
-        {products
-          ? `Tìm thấy ${products.length} sản phẩm cho từ khóa "${query}"`
-          : `Không tìm thấy sản phẩm nào cho từ khóa "${query}"`}
-      </p>
+      <h2 className="text-center text-3xl font-semibold">
+        {isLoadingProducts ? (
+          <p>Đang tìm kiếm sản phẩm cho từ khóa "{query}"...</p>
+        ) : productsData ? (
+          <>
+            Tìm thấy {productMeta?.total} sản phẩm cho từ khóa "{query}"
+            <p className="text-base font-normal">
+              Đang hiển thị {productsData.length} trong tổng số{" "}
+              {productMeta?.total} sản phẩm
+            </p>
+          </>
+        ) : (
+          `Không tìm thấy sản phẩm nào cho từ khóa "${query}"`
+        )}
+      </h2>
 
-      <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-        {products?.map((product) => (
-          <div className="p-4">
-            <OverviewProduct product={product} />
-          </div>
-        ))}
-      </div>
+      {isLoadingProducts ? (
+        <>
+          <Skeleton active />
+        </>
+      ) : (
+        <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+          {productsData?.map((product) => (
+            <div className="p-4">
+              <OverviewProduct product={product} />
+            </div>
+          ))}
+        </div>
+      )}
+
+      {isLoadingProducts ? (
+        <>
+          <Skeleton.Input active={true} size="default" block={true} />
+        </>
+      ) : (
+        productsData && (
+          <CustomPagination productMeta={productMeta} showTotal="sản phẩm" />
+        )
+      )}
     </div>
   );
 };

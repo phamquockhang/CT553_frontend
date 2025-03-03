@@ -14,9 +14,10 @@ const BreadCrumb: React.FC<BreadCrumbProps> = ({
   const { data: allItems } = useQuery({
     queryKey: ["allItems"],
     queryFn: itemService.getAllItems,
+    select: (data) => data.payload?.filter((item) => item.isActivated),
   });
 
-  const menuItems = allItems?.payload?.map((item) => ({
+  const menuItems = allItems?.map((item) => ({
     key: item.itemId,
     label: <a href={`/items/${item.itemId}`}>{item.itemName}</a>,
   }));
@@ -24,9 +25,6 @@ const BreadCrumb: React.FC<BreadCrumbProps> = ({
   return (
     <Breadcrumb
       className="rounded-lg p-2 text-base font-semibold transition-all duration-200 hover:bg-slate-200"
-      // style={{
-      //   fontFamily: "Calibri",
-      // }}
       items={
         displayMenu
           ? [

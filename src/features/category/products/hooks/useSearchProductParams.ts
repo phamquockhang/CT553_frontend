@@ -5,7 +5,7 @@ import {
   SortParams,
 } from "../../../../interfaces";
 
-const useSearchProductParams = (itemId: number) => {
+const useSearchProductParams = (itemId?: number) => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const paginationParams: PaginationParams = {
@@ -17,7 +17,7 @@ const useSearchProductParams = (itemId: number) => {
 
   const filter: ProductFilterCriteria = {
     isActivated: "true",
-    itemId: itemId.toString(),
+    itemId: itemId?.toString() || "",
   };
 
   const sort: SortParams = {
