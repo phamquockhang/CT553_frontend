@@ -1,4 +1,4 @@
-import Items from "../features/category/items/Items";
+import Items from "../features/components/home/Items";
 import Banners from "../features/components/home/Banners";
 import BestSellers from "../features/components/home/BestSellers";
 import { useDynamicTitle } from "../utils";
@@ -10,11 +10,7 @@ const Home: React.FC = () => {
     <>
       <Banners />
       <BestSellers />
-      <Items itemId={1} />
-      <Items itemId={2} />
-      <Items itemId={3} />
-      <Items itemId={4} />
-      <Items itemId={5} />
+      <Items />
     </>
   );
 };

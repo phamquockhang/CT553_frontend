@@ -36,8 +36,8 @@ const AccountMenu: React.FC = () => {
 
   const updatedCartRef = useRef(false);
   useEffect(() => {
-    console.log("customer", customer);
-    console.log("-------------------------useEffect-------------");
+    // console.log("customer", customer);
+    // console.log("-------------------------useEffect-------------");
     if (isLoggingOut || customer === undefined) return;
 
     if (customer !== undefined) {
@@ -51,7 +51,7 @@ const AccountMenu: React.FC = () => {
       customer.cart.cartDetails.length > 0 &&
       cartState.cartDetails.length === 0
     ) {
-      console.log("1-----------Loading cart from database to redux store");
+      // console.log("1-----------Loading cart from database to redux store");
       cartDispatch(clearCart());
       customer.cart.cartDetails.forEach((cartDetail) => {
         cartDispatch(
@@ -70,7 +70,7 @@ const AccountMenu: React.FC = () => {
       customer.cart.cartDetails.length === 0 &&
       cartState.cartDetails.length > 0
     ) {
-      console.log("2-----------Adding products from redux to cart in database");
+      // console.log("2-----------Adding products from redux to cart in database");
       if (customer && customer.cart && customer.cart.cartId) {
         addAllProductsFromReduxToCartInDatabase(
           customer.cart.cartId,
@@ -84,7 +84,7 @@ const AccountMenu: React.FC = () => {
       cartState.cartDetails.length > 0
     ) {
       if (!updatedCartRef.current) {
-        console.log("3-----------Clear cart in redux and add from db");
+        // console.log("3-----------Clear cart in redux and add from db");
         cartDispatch(clearCart());
         customer.cart.cartDetails.forEach((cartDetail) => {
           cartDispatch(

@@ -5,17 +5,18 @@ import { IProduct } from "../../../interfaces";
 import { itemService } from "../../../services";
 import OverviewProduct from "../products/OverviewProduct";
 
-interface ItemsProps {
+interface ItemProps {
   itemId: number;
 }
 
-const Items: React.FC<ItemsProps> = ({ itemId }) => {
-  const { data, isLoading } = useQuery({
+const Item: React.FC<ItemProps> = ({ itemId }) => {
+  const { data: itemData, isLoading } = useQuery({
     queryKey: ["item", itemId],
     queryFn: () => itemService.getItem(itemId),
+    select: (data) => data.payload,
   });
 
-  const allProducts = data?.payload?.products || [];
+  const allProducts = itemData?.products || [];
   allProducts.sort((a: IProduct, b: IProduct) => {
     return a.productName.localeCompare(b.productName);
   });
@@ -25,12 +26,17 @@ const Items: React.FC<ItemsProps> = ({ itemId }) => {
   return (
     <>
       {products && (
-        <div className="my-5">
+        <div className="my-5 border-t border-t-black pt-2">
           <div className="mb-2 flex items-center justify-between">
-            <h2 className="text-2xl font-bold">{data?.payload?.itemName}</h2>
-            {products.length > 10 && (
+            <h2 className="text-2xl font-bold">
+              {itemData?.itemName} (
+              {itemData?.products && itemData.products.length < 10
+                ? itemData.products.length
+                : "10+"}
+              )
+            </h2>
+            {itemData?.products && itemData.products.length > 10 && (
               <Link
-                //   to="/items/best-seller-products"
                 to={`/items/${itemId}`}
                 className="flex items-center gap-2 text-xl leading-none underline hover:text-[#003F8F]"
               >
@@ -51,4 +57,4 @@ const Items: React.FC<ItemsProps> = ({ itemId }) => {
   );
 };
 
-export default Items;
+export default Item;
