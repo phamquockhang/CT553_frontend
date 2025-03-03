@@ -16,7 +16,7 @@ const useSearchProductParams = (itemId?: number) => {
   const query = searchParams.get("query") || "";
 
   const filter: ProductFilterCriteria = {
-    isActivated: "true",
+    isActivated: searchParams.get("isActivated") || "",
     itemId: itemId?.toString() || "",
   };
 

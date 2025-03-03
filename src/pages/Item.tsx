@@ -7,6 +7,7 @@ import useSearchProductParams from "../features/category/products/hooks/useSearc
 import OverviewProduct from "../features/category/products/OverviewProduct";
 import { itemService, productService } from "../services";
 import { useDynamicTitle } from "../utils";
+import SortSection from "../features/category/items/SortSection";
 
 const Item: React.FC = () => {
   const location = useLocation();
@@ -62,6 +63,8 @@ const Item: React.FC = () => {
             <div className="my-5">
               <div className="mb-2 flex items-center justify-between">
                 <h2 className="text-2xl font-bold">{itemData?.itemName}</h2>
+
+                <SortSection />
               </div>
 
               <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
