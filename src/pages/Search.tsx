@@ -5,6 +5,7 @@ import useSearchProductParams from "../features/category/products/hooks/useSearc
 import OverviewProduct from "../features/category/products/OverviewProduct";
 import { productService } from "../services";
 import { useDynamicTitle } from "../utils";
+import SortSection from "../features/category/items/SortSection";
 
 const Search: React.FC = () => {
   const { paginationParams, query, filter, sort } = useSearchProductParams();
@@ -54,13 +55,19 @@ const Search: React.FC = () => {
           <Skeleton active />
         </>
       ) : (
-        <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-          {productsData?.map((product) => (
-            <div className="p-4">
-              <OverviewProduct product={product} />
-            </div>
-          ))}
-        </div>
+        <>
+          <div className="flex items-end justify-end">
+            <SortSection />
+          </div>
+
+          <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+            {productsData?.map((product) => (
+              <div className="p-4">
+                <OverviewProduct product={product} />
+              </div>
+            ))}
+          </div>
+        </>
       )}
 
       {isLoadingProducts ? (
