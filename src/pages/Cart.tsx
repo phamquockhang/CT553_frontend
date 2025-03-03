@@ -16,34 +16,38 @@ import { useDynamicTitle } from "../utils";
 
 const Cart: React.FC = () => {
   useDynamicTitle("Giỏ hàng");
+
+  const { updateCartDetail } = UpdateCartDetail();
+  const { deleteCartDetail } = DeleteCartDetail();
+  const { cartState, cartDispatch } = useCartData();
+  const navigate = useNavigate();
+
   const customer: ICustomer | null = JSON.parse(
     localStorage.getItem("customer") || "null",
   );
-  const cart = customer?.cart;
+
+  const cartData = customer && customer.customerId ? cartState : undefined;
+  console.log("cartData", cartData);
 
   function findCartDetailId(productId: number) {
-    return cart?.cartDetails.find(
+    return cartData?.cartDetails.find(
       (cartDetail) => cartDetail.productId === productId,
     )?.cartDetailId;
   }
 
-  const { updateCartDetail } = UpdateCartDetail();
-  const { deleteCartDetail } = DeleteCartDetail();
+  const productsIdFormRedux = cartState.cartDetails.map(
+    (product) => product.productId,
+  );
 
-  const { cartState, cartDispatch } = useCartData();
-  const navigate = useNavigate();
-
-  const productsId = cartState.cartDetails.map((product) => product.productId);
-  // console.log("productsId", productsId);
   const { data } = useQuery({
-    queryKey: ["productsInCart", productsId],
+    queryKey: ["productsInCart", productsIdFormRedux],
     queryFn: async () => {
-      if (!productsId || productsId.length === 0) return [];
+      if (!productsIdFormRedux || productsIdFormRedux.length === 0) return [];
       return await Promise.all(
-        productsId.map((id) => productService.getProduct(id)),
+        productsIdFormRedux.map((id) => productService.getProduct(id)),
       );
     },
-    enabled: productsId?.length > 0,
+    enabled: productsIdFormRedux?.length > 0,
   });
   const products = data ? data.flatMap((result) => result.payload || []) : [];
 
@@ -153,7 +157,7 @@ const Cart: React.FC = () => {
                   type="default"
                   className="rounded border py-6 font-semibold text-[#003F8F] transition-all duration-200 hover:border-[#003F8F]"
                   onClick={() => {
-                    navigate("/products");
+                    navigate("/items");
                   }}
                 >
                   <span className="mr-2">&#x1F6D2;</span> TIẾP TỤC MUA HÀNG

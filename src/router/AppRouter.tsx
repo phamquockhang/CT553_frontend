@@ -9,6 +9,7 @@ import Product from "../pages/Product";
 import Item from "../pages/Item";
 import Search from "../pages/Search";
 import Cart from "../pages/Cart";
+import Items from "../pages/Items";
 
 const router = createBrowserRouter([
   {
@@ -33,7 +34,7 @@ const router = createBrowserRouter([
         children: [
           {
             path: "",
-            element: <div>Items</div>,
+            element: <Items />,
           },
           {
             path: ":itemId",

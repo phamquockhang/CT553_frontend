@@ -1,8 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { itemService } from "../../../services";
-import Item from "../../category/items/Item";
+import Item from "./Item";
 
-const Items: React.FC = () => {
+const CategoryItems: React.FC = () => {
   const { data: allItem } = useQuery({
     queryKey: ["allItems"],
     queryFn: itemService.getAllItems,
@@ -16,4 +16,4 @@ const Items: React.FC = () => {
   );
 };
 
-export default Items;
+export default CategoryItems;
