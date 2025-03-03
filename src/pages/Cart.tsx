@@ -157,7 +157,7 @@ const Cart: React.FC = () => {
                   type="default"
                   className="rounded border py-6 font-semibold text-[#003F8F] transition-all duration-200 hover:border-[#003F8F]"
                   onClick={() => {
-                    navigate("/products");
+                    navigate("/items");
                   }}
                 >
                   <span className="mr-2">&#x1F6D2;</span> TIẾP TỤC MUA HÀNG
