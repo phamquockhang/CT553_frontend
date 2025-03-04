@@ -431,8 +431,8 @@ const RegisterForm: React.FC = () => {
         >
           Đăng ký
         </Button>
-      </Form.Item>{" "}
-      git init
+      </Form.Item>
+
       <p>
         Bạn đã có tài khoản?{" "}
         <a

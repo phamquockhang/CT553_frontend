@@ -1,5 +1,5 @@
-import { AxiosInstance } from "axios"
-import { createApiClient } from "../api-client"
+import { AxiosInstance } from "axios";
+import { createApiClient } from "../api-client";
 import {
   ApiResponse,
   IBriefProduct,
@@ -7,57 +7,72 @@ import {
   ProductFilterCriteria,
   Page,
   PaginationParams,
-  SortParams
-} from "../../interfaces"
+  SortParams,
+} from "../../interfaces";
 
 interface IProductService {
-  getProduct(productId: number): Promise<ApiResponse<IProduct>>
+  getProduct(productId: number): Promise<ApiResponse<IProduct>>;
   getProducts(
     pagination: PaginationParams,
     query: string,
     filter?: ProductFilterCriteria,
-    sort?: SortParams
-  ): Promise<ApiResponse<Page<IProduct>>>
-  create(newProduct: Omit<IBriefProduct, "productId">): Promise<ApiResponse<IProduct>>
-  update(productId: number, updatedProduct: IBriefProduct): Promise<ApiResponse<IProduct>>
-  delete(productId: number): Promise<ApiResponse<void>>
+    sort?: SortParams,
+  ): Promise<ApiResponse<Page<IProduct>>>;
+  getAllProducts(): Promise<ApiResponse<IProduct[]>>;
+  create(
+    newProduct: Omit<IBriefProduct, "productId">,
+  ): Promise<ApiResponse<IProduct>>;
+  update(
+    productId: number,
+    updatedProduct: IBriefProduct,
+  ): Promise<ApiResponse<IProduct>>;
+  delete(productId: number): Promise<ApiResponse<void>>;
 }
 
-const apiClient: AxiosInstance = createApiClient("products")
+const apiClient: AxiosInstance = createApiClient("products");
 
 class ProductService implements IProductService {
   async getProduct(productId: number): Promise<ApiResponse<IProduct>> {
-    return await apiClient.get(`/${productId}`)
+    return await apiClient.get(`/${productId}`);
   }
 
   async getProducts(
     pagination: PaginationParams,
     query: string,
     filter?: ProductFilterCriteria,
-    sort?: SortParams
+    sort?: SortParams,
   ): Promise<ApiResponse<Page<IProduct>>> {
-    return await apiClient.get("", {
+    return await apiClient.get("/public", {
       params: {
         ...pagination,
         ...filter,
         query,
         sortBy: sort?.sortBy !== "" ? sort?.sortBy : undefined,
-        direction: sort?.direction !== "" ? sort?.direction : undefined
-      }
-    })
+        direction: sort?.direction !== "" ? sort?.direction : undefined,
+      },
+    });
   }
 
-  async create(newProduct: Omit<IBriefProduct, "productId">): Promise<ApiResponse<IProduct>> {
-    return await apiClient.post("", newProduct)
+  async getAllProducts(): Promise<ApiResponse<IProduct[]>> {
+    return await apiClient.get("/all");
   }
 
-  async update(productId: number, updatedProduct: IBriefProduct): Promise<ApiResponse<IProduct>> {
-    return await apiClient.put(`/${productId}`, updatedProduct)
+  async create(
+    newProduct: Omit<IBriefProduct, "productId">,
+  ): Promise<ApiResponse<IProduct>> {
+    return await apiClient.post("", newProduct);
+  }
+
+  async update(
+    productId: number,
+    updatedProduct: IBriefProduct,
+  ): Promise<ApiResponse<IProduct>> {
+    return await apiClient.put(`/${productId}`, updatedProduct);
   }
 
   async delete(productId: number): Promise<ApiResponse<void>> {
-    return await apiClient.delete(`/${productId}`)
+    return await apiClient.delete(`/${productId}`);
   }
 }
 
-export const productService = new ProductService()
+export const productService = new ProductService();

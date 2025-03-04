@@ -7,7 +7,9 @@ const MainLayout: React.FC = () => {
     <div className="flex min-h-screen flex-col">
       <Header />
       <div className="flex-grow">
-        <Outlet />
+        <div className="container mx-auto mt-1 px-5 transition-all duration-200 sm:px-10 xl:px-20">
+          <Outlet />
+        </div>
       </div>
       <Footer />
     </div>

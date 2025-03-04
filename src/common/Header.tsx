@@ -1,3 +1,4 @@
+import { useQuery } from "@tanstack/react-query";
 import {
   Anchor,
   Menu as AntdMenu,
@@ -7,41 +8,63 @@ import {
   Dropdown,
 } from "antd";
 import { useCallback, useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { AiFillLike } from "react-icons/ai";
+import { FaShippingFast } from "react-icons/fa";
+import { MdOutlinePublishedWithChanges } from "react-icons/md";
+import { PiCodesandboxLogoBold } from "react-icons/pi";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import useStickyScroll from "../features/components/hooks/useStickyScroll";
 import { ICustomer, IStaff, PRIMARY_COLOR } from "../interfaces";
-import { customerService, staffService } from "../services";
+import { customerService, itemService, staffService } from "../services";
 import AccountMenu from "./components/AccountMenu";
+import BoxSearch from "./components/BoxSearch";
 import Menu from "./components/Menu";
-import Search from "./components/Search";
+import ShoppingCart from "./components/ShoppingCart";
 
 const Header: React.FC = () => {
   const navigate = useNavigate();
   const [showAccountMenu, setShowAccountMenu] = useState<boolean>(false);
   const [user, setUser] = useState<ICustomer | IStaff | null>(null);
   const accessToken = localStorage.getItem("access_token");
+  const isSticky = useStickyScroll();
+
+  const location = useLocation();
+  const pathParts = location.pathname.split("/");
+
+  const { data: allItems } = useQuery({
+    queryKey: ["allItems"],
+    queryFn: itemService.getAllItems,
+    select: (data) => data.payload?.filter((item) => item.isActivated),
+  });
 
   useEffect(() => {
     const fetchUserData = async () => {
-      if (accessToken) {
-        try {
-          const customerResponse = await customerService.getLoggedInCustomer();
-          const staffResponse = await staffService.getLoggedInStaff();
-
-          const userData = customerResponse.success
-            ? customerResponse.payload
-            : staffResponse.success
-              ? staffResponse.payload
-              : null;
-
-          if (userData) {
-            setUser(userData);
-            setShowAccountMenu(true);
-          }
-        } catch (error) {
-          console.error("Failed to fetch user data:", error);
-        }
-      } else {
+      if (!accessToken) {
         setShowAccountMenu(false);
+        return;
+      }
+
+      try {
+        // Thử lấy thông tin customer trước
+        // console.log("Fetching customer...");
+        const customerResponse = await customerService.getLoggedInCustomer();
+        if (customerResponse.success && customerResponse.payload) {
+          // console.log("Customer found:", customerResponse.payload);
+          setUser(customerResponse.payload);
+          setShowAccountMenu(true);
+          return; // Dừng luôn, không gọi staff API
+        }
+
+        // Nếu customer API không thành công, thử gọi staff API
+        // console.log("Fetching staff...");
+        const staffResponse = await staffService.getLoggedInStaff();
+        if (staffResponse.success && staffResponse.payload) {
+          // console.log("Staff found:", staffResponse.payload);
+          setUser(staffResponse.payload);
+          setShowAccountMenu(true);
+        }
+      } catch (error) {
+        console.error("Failed to fetch user data:", error);
       }
     };
 
@@ -58,9 +81,14 @@ const Header: React.FC = () => {
 
   const menuItems = [
     {
-      key: "products",
-      title: "Các sản phẩm của chúng tôi",
-      href: "/products",
+      key: "items",
+      title: "Các mặt hàng của chúng tôi",
+      href: "#",
+      submenu: allItems?.map((item) => ({
+        title: item.itemName,
+        href: `/items/${item.itemId}`,
+        key: `item-${item.itemId}`,
+      })),
     },
     {
       key: "policy",
@@ -92,7 +120,10 @@ const Header: React.FC = () => {
   ];
 
   return (
-    <header className="sticky top-0 z-50 rounded-b-3xl bg-white shadow-md">
+    <header
+      className={`${isSticky ? "-translate-y-0" : `-translate-y-[100%]`} sticky top-0 z-50 rounded-b-3xl bg-white shadow-md transition-all duration-500`}
+    >
+      <img src="/banner-header.jpg" alt="Banner Header" />
       <div className="mx-auto flex items-center justify-between px-4 py-2">
         {/* Logo */}
         <Link to="/" className="flex items-center">
@@ -104,7 +135,7 @@ const Header: React.FC = () => {
         </Link>
 
         {/* Menu Navigation */}
-        <div className="hidden items-center xl:flex">
+        <div className="hidden items-center lg:flex">
           <ConfigProvider
             theme={{
               token: {
@@ -155,10 +186,14 @@ const Header: React.FC = () => {
 
         {/* Right Side Menus */}
         <div className="flex items-center">
-          <Search />
+          <BoxSearch />
+          <ShoppingCart />
           <Divider type="vertical" className="h-6 bg-black" />
           {showAccountMenu ? (
-            <AccountMenu />
+            <>
+              {/* <ShoppingCart /> */}
+              <AccountMenu />
+            </>
           ) : (
             <>
               <Button
@@ -194,6 +229,55 @@ const Header: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {pathParts[pathParts.length - 1] !== "login" &&
+        pathParts[pathParts.length - 1] !== "register" && (
+          <div className="hidden justify-center border-t border-gray-200 py-4 transition-all duration-500 md:flex md:gap-1 lg:gap-16 xl:gap-32">
+            <div className="flex items-center justify-center gap-2">
+              <div className="rounded-full bg-[#003F8F] p-2">
+                <AiFillLike className="text-2xl text-white" />
+              </div>
+
+              <div>
+                <p className="text-xl leading-none">Cam kết chất lượng</p>
+                <p className="text-xl leading-none">An toàn xuất xứ</p>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-center gap-2">
+              <div className="rounded-full bg-[#003F8F] p-2">
+                <MdOutlinePublishedWithChanges className="text-2xl text-white" />
+              </div>
+
+              <div>
+                <p className="text-xl leading-none">1 đổi 1 trong 2h</p>
+                <p className="text-xl leading-none">Nhanh chóng, tận nhà</p>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-center gap-2">
+              <div className="rounded-full bg-[#003F8F] p-2">
+                <PiCodesandboxLogoBold className="text-2xl text-white" />
+              </div>
+
+              <div>
+                <p className="text-xl leading-none">Chuẩn đóng gói</p>
+                <p className="text-xl leading-none">Sạch sẽ, tiện lợi</p>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-center gap-2">
+              <div className="rounded-full bg-[#003F8F] p-2">
+                <FaShippingFast className="text-2xl text-white" />
+              </div>
+
+              <div>
+                <p className="text-xl leading-none">Giao hàng nhanh</p>
+                <p className="text-xl leading-none">Free Ship</p>
+              </div>
+            </div>
+          </div>
+        )}
     </header>
   );
 };
