@@ -26,7 +26,7 @@ const FloatingImage: React.FC<FloatingImageProps> = ({
       img.style.transform = `translate(${startX}px, ${startY}px)`;
       // Sử dụng requestAnimationFrame để cho phép hiệu ứng chạy sau khi render
       requestAnimationFrame(() => {
-        img.style.transition = "transform 0.8s cubic-bezier(0.8, 0, 0.2, 1)";
+        img.style.transition = "transform 0.5s cubic-bezier(0.8, 0, 0.2, 1)";
         img.style.transform = `translate(${endX}px, ${endY}px) scale(0.05)`;
       });
       // Lắng nghe sự kiện kết thúc animation

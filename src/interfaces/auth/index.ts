@@ -1,4 +1,6 @@
 import { Dayjs } from "dayjs";
+import { ICart } from "../booking";
+import { IAddress } from "../address";
 
 export interface IStaff {
   staffId: string;
@@ -24,6 +26,7 @@ export interface ICustomer {
   isActivated: boolean;
   dob: string | Dayjs;
   role: IRole;
+  addresses: IAddress[];
   score: IScore;
   cart: ICart;
   createdAt: string;
@@ -42,20 +45,6 @@ export interface IScore {
   newValue: number;
   isCurrent: boolean;
   createdAt?: string;
-}
-
-export interface ICart {
-  cartId?: number;
-  cartDetails: ICartDetail[];
-  createdAt?: string;
-}
-
-export interface ICartDetail {
-  cartDetailId?: number;
-  productId: number;
-  quantity: number;
-  createdAt?: string;
-  updatedAt?: string;
 }
 
 export interface IPermission {

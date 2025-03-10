@@ -20,3 +20,23 @@ export enum RoleName {
   STAFF = "STAFF",
   CUSTOMER = "CUSTOMER",
 }
+
+export enum PaymentStatus {
+  PAID = "PAID",
+  UNPAID = "UNPAID",
+}
+
+export enum OrderStatus {
+  PENDING = "PENDING",
+  CONFIRMED = "CONFIRMED",
+  PREPARING = "PREPARING",
+  SHIPPING = "SHIPPING",
+  DELIVERED = "DELIVERED",
+  COMPLETED = "COMPLETED",
+  CANCELLED = "CANCELLED",
+}
+
+export enum TransactionType {
+  PAYMENT = "PAYMENT",
+  CANCLE = "CANCLE",
+}

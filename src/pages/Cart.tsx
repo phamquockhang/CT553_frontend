@@ -165,9 +165,9 @@ const Cart: React.FC = () => {
                 <Button
                   type="primary"
                   className="rounded border bg-[#003F8F] py-6 font-semibold text-white transition-all duration-500"
-                  // onClick={() => {
-                  //   navigate("/products");
-                  // }}
+                  onClick={() => {
+                    navigate("/check-out");
+                  }}
                 >
                   TIẾN HÀNH ĐẶT HÀNG
                 </Button>
