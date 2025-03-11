@@ -141,7 +141,12 @@ const CheckOut: React.FC = () => {
         0,
       ),
       usedScore: 0,
-      paymentStatus: PaymentStatus.UNPAID,
+
+      // when pay by vnpay: pending
+      // by cod: cod
+      paymentStatus: PaymentStatus.PENDING,
+      // paymentStatus: "UNPAID",
+
       orderStatus: OrderStatus.PENDING,
       sellingOrderDetails: sellingOrderDetails,
       earnedScore: 0,
@@ -260,9 +265,9 @@ const CheckOut: React.FC = () => {
               placeholder="Mã giảm giá"
               className="flex-1 rounded-l-lg border p-2"
             />
-            <button className="rounded-r-lg bg-blue-800 px-4 py-2 text-white">
+            <div className="cursor-pointer rounded-r-lg bg-blue-800 px-4 py-2 text-white">
               SỬ DỤNG
-            </button>
+            </div>
           </div>
 
           {/* Tổng tiền */}

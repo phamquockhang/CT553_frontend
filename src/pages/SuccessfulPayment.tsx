@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { transactionService } from "../services";
 import Loading from "../common/Loading";
 
-const PaymentSuccess: React.FC = () => {
+const SuccessfulPayment: React.FC = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
@@ -37,6 +37,13 @@ const PaymentSuccess: React.FC = () => {
             >
               Về trang chủ
             </Button>
+            <Button
+              type="primary"
+              className="mt-4"
+              onClick={() => navigate("/items")}
+            >
+              Tiếp tục mua hàng
+            </Button>
           </Card>
         </div>
       )}
@@ -44,4 +51,4 @@ const PaymentSuccess: React.FC = () => {
   );
 };
 
-export default PaymentSuccess;
+export default SuccessfulPayment;

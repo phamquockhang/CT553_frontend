@@ -12,7 +12,8 @@ import Cart from "../pages/Cart";
 import Items from "../pages/Items";
 import CheckOut from "../pages/CheckOut";
 import SecoundLayout from "../layouts/SecoundLayout";
-import PaymentSuccess from "../pages/PaymentSuccess";
+import SuccessfulPayment from "../pages/SuccessfulPayment";
+import FailedPayment from "../pages/FailedPayment";
 
 const router = createBrowserRouter([
   {
@@ -71,8 +72,17 @@ const router = createBrowserRouter([
         element: <Cart />,
       },
       {
-        path: "/order/payment/success",
-        element: <PaymentSuccess />,
+        path: "order/payment",
+        children: [
+          {
+            path: "success",
+            element: <SuccessfulPayment />,
+          },
+          {
+            path: "fail",
+            element: <FailedPayment />,
+          },
+        ],
       },
     ],
   },
