@@ -5,7 +5,9 @@ import { format } from "date-fns";
 
 export function useDynamicTitle(title: string) {
   useEffect(() => {
-    document.title = title;
+    if (title.length > 0) {
+      document.title = title;
+    }
   }, [title]);
 }
 

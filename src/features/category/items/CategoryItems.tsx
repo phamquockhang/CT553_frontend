@@ -11,7 +11,9 @@ const CategoryItems: React.FC = () => {
 
   return (
     <>
-      {allItem?.map((item) => <Item key={item.itemId} itemId={item.itemId} />)}
+      {allItem?.map((item) => (
+        <Item key={item.itemId} itemId={item.itemId} useTitle={false} />
+      ))}
     </>
   );
 };

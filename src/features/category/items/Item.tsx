@@ -8,9 +8,10 @@ import useSearchProductParams from "../products/hooks/useSearchProductParams";
 
 interface ItemProps {
   itemId: number;
+  useTitle?: boolean;
 }
 
-const Item: React.FC<ItemProps> = ({ itemId }) => {
+const Item: React.FC<ItemProps> = ({ itemId, useTitle = true }) => {
   const { paginationParams, query, filter, sort } =
     useSearchProductParams(itemId);
 
@@ -19,7 +20,8 @@ const Item: React.FC<ItemProps> = ({ itemId }) => {
     queryFn: () => itemService.getAllItems(),
     select: (data) => data?.payload?.find((item) => item.itemId === itemId),
   });
-  useDynamicTitle(itemData?.itemName || "Item Detail");
+
+  useDynamicTitle(useTitle ? `${itemData?.itemName} - K-Seafood` : "");
 
   const { data, isLoading: isLoadingProducts } = useQuery({
     queryKey: ["products", paginationParams, query, filter, sort].filter(
