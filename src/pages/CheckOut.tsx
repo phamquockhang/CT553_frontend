@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import PaymentMethodSelector from "../features/booking/check-out/PaymentMethodSelector";
 import ShippingInfoForm from "../features/booking/check-out/ShippingInfoForm";
+import { TbLogin2 } from "react-icons/tb";
 import {
   IBriefTransaction,
   ICustomer,
@@ -22,6 +23,7 @@ import {
   transactionService,
 } from "../services";
 import { useDynamicTitle } from "../utils";
+import { clearCart } from "../redux/slices/cartSlice";
 
 const CheckOut: React.FC = () => {
   useDynamicTitle("Thanh toán");
@@ -41,7 +43,7 @@ const CheckOut: React.FC = () => {
     string | undefined
   >();
   const [selectedMethod, setSelectedMethod] = useState<number>(1);
-  const { cartState } = useCartData();
+  const { cartState, cartDispatch } = useCartData();
 
   const navigate = useNavigate();
 
@@ -122,9 +124,8 @@ const CheckOut: React.FC = () => {
         //     query.queryKey.includes("selling_order") ||
         //     query.queryKey.includes("customers"),
         // });
-
-        if (data.success) toast.success(data.message || "Operation successful");
-        else if (!data.success) toast.error(data.message || "Operation failed");
+        // if (data.success) toast.success(data.message || "Operation successful");
+        // else if (!data.success) toast.error(data.message || "Operation failed");
       },
 
       onError: (error) => {
@@ -185,6 +186,8 @@ const CheckOut: React.FC = () => {
               "/order/success?sellingOrderId=" + data.payload?.sellingOrderId,
             );
           }
+
+          cartDispatch(clearCart());
         }
       },
     });
@@ -223,24 +226,41 @@ const CheckOut: React.FC = () => {
       <div className="mx-auto flex max-w-6xl rounded-lg bg-white p-6 shadow-md">
         {/* Thông tin giao hàng */}
         <div className="w-2/3 rounded-lg pr-6">
-          <div className="w-2/3 pr-8">
+          <div className="w-full pr-8">
             <img src="/logo_512.png" alt="Logo" className="mb-4 w-32" />
             <h2 className="text-lg font-semibold">Thông tin giao hàng</h2>
 
             <div className="my-4 flex items-center gap-4">
               <Avatar shape="square" size={64} icon={<UserOutlined />} />
-              <div>
-                <p className="font-semibold">
-                  {customer?.lastName} {customer?.firstName}
-                </p>
-                <p className="text-gray-500">{customer?.email}</p>
-                <p className="text-gray-500">
-                  Điểm tích lũy hiện có:{" "}
-                  <span className="font-semibold text-blue-900">
-                    {customer?.score.newValue}
-                  </span>
-                </p>
-              </div>
+              {customer ? (
+                <>
+                  <div>
+                    <p className="font-semibold">
+                      {customer?.lastName} {customer?.firstName}
+                    </p>
+                    <p className="text-gray-500">{customer?.email}</p>
+                    <p className="text-gray-500">
+                      Điểm tích lũy hiện có:{" "}
+                      <span className="font-semibold text-blue-900">
+                        {customer?.score.newValue}
+                      </span>
+                    </p>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div>
+                    <p className="font-semibold">Khách hàng vãng lai</p>
+                    <p className="text-gray-500">
+                      Đăng nhập để tích điểm, nhận ưu đãi và theo dõi đơn hàng
+                    </p>
+                    <TbLogin2
+                      className="cursor-pointer text-xl"
+                      onClick={() => navigate("/login")}
+                    />
+                  </div>
+                </>
+              )}
             </div>
           </div>
 

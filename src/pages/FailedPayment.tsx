@@ -6,9 +6,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import Loading from "../common/Loading";
 import {
   IBriefTransaction,
-  OrderStatus,
   PaymentStatus,
-  TransactionStatus,
   TransactionType,
 } from "../interfaces";
 import { transactionService } from "../services";
@@ -61,7 +59,7 @@ const FailedPayment: React.FC = () => {
     createTransaction(newTransaction);
   }
 
-  console.log(transactionData);
+  // console.log(transactionData);
 
   return (
     <>
@@ -89,8 +87,8 @@ const FailedPayment: React.FC = () => {
                 Về trang chủ
               </Button>
 
-              {transactionData?.sellingOrder.paymentStatus ===
-                PaymentStatus.PENDING && (
+              {transactionData?.sellingOrder.paymentStatus !==
+                PaymentStatus.EXPIRED && (
                 <Button
                   loading={isCreatingTransaction}
                   type="primary"

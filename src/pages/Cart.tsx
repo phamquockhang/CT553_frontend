@@ -112,7 +112,7 @@ const Cart: React.FC = () => {
             <Button
               className="mt-3 rounded border bg-[#003F8F] py-6 font-semibold text-white transition-all duration-500 hover:border-[#003F8F] hover:bg-white hover:text-[#003F8F]"
               onClick={() => {
-                navigate("/products");
+                navigate("/items");
               }}
             >
               <span className="mr-2">&#x1F6D2;</span> TIẾP TỤC MUA HÀNG

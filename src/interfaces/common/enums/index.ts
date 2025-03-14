@@ -22,11 +22,12 @@ export enum RoleName {
 }
 
 export enum PaymentStatus {
-  // PAID = "PAID",
-  // UNPAID = "UNPAID",
   COD = "COD",
   PENDING = "PENDING",
+  FAILED = "FAILED",
   CANCELLED = "CANCELLED",
+  SUCCESS = "SUCCESS",
+  EXPIRED = "EXPIRED",
 }
 
 export enum OrderStatus {
