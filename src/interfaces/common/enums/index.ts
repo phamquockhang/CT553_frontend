@@ -42,3 +42,11 @@ export enum OrderStatus {
 export enum TransactionType {
   PAYMENT = "PAYMENT",
 }
+
+export enum TransactionStatus {
+  SUCCESS = "SUCCESS",
+  PENDING = "PENDING",
+  FAILED = "FAILED",
+  EXPIRED = "EXPIRED",
+  CANCELLED = "CANCELLED",
+}

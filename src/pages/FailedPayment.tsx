@@ -1,8 +1,16 @@
 import { CloseCircleOutlined } from "@ant-design/icons";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { Button, Card } from "antd";
+import toast from "react-hot-toast";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import Loading from "../common/Loading";
+import {
+  IBriefTransaction,
+  OrderStatus,
+  PaymentStatus,
+  TransactionStatus,
+  TransactionType,
+} from "../interfaces";
 import { transactionService } from "../services";
 
 const FailedPayment: React.FC = () => {
@@ -11,11 +19,49 @@ const FailedPayment: React.FC = () => {
 
   const transactionId = searchParams.get("transactionId");
 
-  const { data: orderId, isPending } = useQuery({
+  const { data: transactionData, isPending } = useQuery({
     queryKey: ["transaction", transactionId],
     queryFn: () => transactionService.getTransactionById(Number(transactionId)),
-    select: (data) => data.payload?.sellingOrder.sellingOrderId,
+    select: (data) => data.payload,
   });
+
+  const { mutate: createTransaction, isPending: isCreatingTransaction } =
+    useMutation({
+      mutationFn: (newTransaction: IBriefTransaction) => {
+        return transactionService.createTransaction(newTransaction);
+      },
+
+      onSuccess: (data) => {
+        if (data.success) {
+          console.log(data.payload?.paymentMethod.paymentUrl);
+          if (data.payload?.paymentMethod.paymentUrl) {
+            window.location.href = data.payload?.paymentMethod.paymentUrl;
+          }
+        } else if (!data.success)
+          toast.error(data.message || "Operation failed");
+      },
+
+      onError: (error) => {
+        toast.error(error.message || "Operation failed");
+      },
+    });
+
+  function handleRetryPayment() {
+    const newTransaction: IBriefTransaction = {
+      sellingOrder: {
+        sellingOrderId: transactionData?.sellingOrder.sellingOrderId || "",
+      },
+      transactionType: TransactionType.PAYMENT,
+      paymentMethod: {
+        paymentMethodId: 1,
+        paymentMethodName: "VN_PAY",
+      },
+    };
+
+    createTransaction(newTransaction);
+  }
+
+  console.log(transactionData);
 
   return (
     <>
@@ -29,7 +75,9 @@ const FailedPayment: React.FC = () => {
             <h2 className="text-2xl font-semibold">Thanh toán thất bại!</h2>
             <p className="mt-2 text-gray-600">
               Mã đơn hàng:{" "}
-              <span className="font-bold text-black">{orderId}</span>
+              <span className="font-bold text-black">
+                {transactionData?.sellingOrder.sellingOrderId}
+              </span>
             </p>
 
             <div className="flex gap-2">
@@ -40,12 +88,24 @@ const FailedPayment: React.FC = () => {
               >
                 Về trang chủ
               </Button>
+
+              {transactionData?.sellingOrder.paymentStatus ===
+                PaymentStatus.PENDING && (
+                <Button
+                  loading={isCreatingTransaction}
+                  type="primary"
+                  className="mt-4"
+                  onClick={handleRetryPayment}
+                >
+                  Thanh toán lại
+                </Button>
+              )}
               <Button
                 type="primary"
                 className="mt-4"
                 onClick={() => navigate("/check-out")}
               >
-                Thanh toán lại
+                Chỉnh sửa đơn hàng
               </Button>
             </div>
           </Card>
