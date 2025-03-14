@@ -2,11 +2,13 @@ import { UserOutlined } from "@ant-design/icons";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { Avatar, Button, Form } from "antd";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+import PaymentMethodSelector from "../features/booking/check-out/PaymentMethodSelector";
 import ShippingInfoForm from "../features/booking/check-out/ShippingInfoForm";
 import {
   IBriefTransaction,
   ICustomer,
-  IPaymentMethod,
   ISellingOrder,
   ISellingOrderDetail,
   OrderStatus,
@@ -19,10 +21,7 @@ import {
   sellingOrderService,
   transactionService,
 } from "../services";
-import toast from "react-hot-toast";
 import { useDynamicTitle } from "../utils";
-import PaymentMethodSelector from "../features/booking/check-out/PaymentMethodSelector";
-import { useNavigate } from "react-router-dom";
 
 const CheckOut: React.FC = () => {
   useDynamicTitle("Thanh toán");
@@ -235,6 +234,12 @@ const CheckOut: React.FC = () => {
                   {customer?.lastName} {customer?.firstName}
                 </p>
                 <p className="text-gray-500">{customer?.email}</p>
+                <p className="text-gray-500">
+                  Điểm tích lũy hiện có:{" "}
+                  <span className="font-semibold text-blue-900">
+                    {customer?.score.newValue}
+                  </span>
+                </p>
               </div>
             </div>
           </div>

@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { Button, Input, Skeleton } from "antd";
+import { Button, Skeleton } from "antd";
 import { useNavigate } from "react-router-dom";
 import BreadCrumb from "../common/BreadCrumb";
 import OverviewProductInCart from "../features/category/products/OverviewProductInCart";
@@ -140,10 +140,10 @@ const Cart: React.FC = () => {
               </>
             )}
 
-            <Input.TextArea
+            {/* <Input.TextArea
               className="mt-4 rounded-md p-3"
               placeholder="Ghi chú"
-            />
+            /> */}
 
             <div className="mt-6 flex items-center justify-between">
               <h3 className="text-lg font-semibold">

@@ -31,7 +31,7 @@ const SuccessfulPayment: React.FC = () => {
               <span className="font-bold text-black">{orderId}</span>
             </p>
             <Button
-              type="primary"
+              type="default"
               className="mt-4"
               onClick={() => navigate("/")}
             >
@@ -39,7 +39,7 @@ const SuccessfulPayment: React.FC = () => {
             </Button>
             <Button
               type="primary"
-              className="mt-4"
+              className="ml-2 mt-4"
               onClick={() => navigate("/items")}
             >
               Tiếp tục mua hàng
