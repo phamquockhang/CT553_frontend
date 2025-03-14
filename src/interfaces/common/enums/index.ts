@@ -41,5 +41,4 @@ export enum OrderStatus {
 
 export enum TransactionType {
   PAYMENT = "PAYMENT",
-  CANCLE = "CANCLE",
 }

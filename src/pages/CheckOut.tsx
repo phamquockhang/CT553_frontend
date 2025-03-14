@@ -1,11 +1,12 @@
 import { UserOutlined } from "@ant-design/icons";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { Avatar, Form } from "antd";
+import { Avatar, Button, Form } from "antd";
 import { useEffect, useState } from "react";
 import ShippingInfoForm from "../features/booking/check-out/ShippingInfoForm";
 import {
   IBriefTransaction,
   ICustomer,
+  IPaymentMethod,
   ISellingOrder,
   ISellingOrderDetail,
   OrderStatus,
@@ -20,6 +21,8 @@ import {
 } from "../services";
 import toast from "react-hot-toast";
 import { useDynamicTitle } from "../utils";
+import PaymentMethodSelector from "../features/booking/check-out/PaymentMethodSelector";
+import { useNavigate } from "react-router-dom";
 
 const CheckOut: React.FC = () => {
   useDynamicTitle("Thanh toán");
@@ -38,7 +41,10 @@ const CheckOut: React.FC = () => {
   const [formattedAddress, setFormattedAddress] = useState<
     string | undefined
   >();
+  const [selectedMethod, setSelectedMethod] = useState<number>(1);
   const { cartState } = useCartData();
+
+  const navigate = useNavigate();
 
   const productsIdFormRedux = cartState.cartDetails.map(
     (product) => product.productId,
@@ -104,7 +110,7 @@ const CheckOut: React.FC = () => {
       },
     });
 
-  const { mutate: createSellingOrder, isPending: isCreatingOrder } =
+  const { mutate: createSellingOrder, isPending: isCreatingSellingOrder } =
     useMutation({
       mutationFn: (newSellingOrder: Omit<ISellingOrder, "sellingOrderId">) => {
         return sellingOrderService.create(newSellingOrder);
@@ -134,7 +140,7 @@ const CheckOut: React.FC = () => {
       customerName: values.customerName,
       phone: values.phone,
       // email: isSaveCustomer ? values.email : undefined,
-      // note: isSaveCustomer ? values.note : undefined,
+      note: values.note || undefined,
       address: formattedAddress,
       totalAmount: sellingOrderDetails.reduce(
         (sum, item) => sum + item.totalPrice,
@@ -144,7 +150,8 @@ const CheckOut: React.FC = () => {
 
       // when pay by vnpay: pending
       // by cod: cod
-      paymentStatus: PaymentStatus.PENDING,
+      paymentStatus:
+        selectedMethod === 1 ? PaymentStatus.PENDING : PaymentStatus.COD,
       // paymentStatus: "UNPAID",
 
       orderStatus: OrderStatus.PENDING,
@@ -152,7 +159,8 @@ const CheckOut: React.FC = () => {
       earnedScore: 0,
       orderStatuses: [],
     };
-    // console.log("Received values:", newValues);
+
+    console.log("Received values:", newValues);
 
     createSellingOrder(newValues, {
       onSuccess: (data) => {
@@ -166,11 +174,18 @@ const CheckOut: React.FC = () => {
             },
             transactionType: TransactionType.PAYMENT,
             paymentMethod: {
-              paymentMethodId: 1,
-              paymentMethodName: "VN_Pay",
+              paymentMethodId: selectedMethod,
+              paymentMethodName: selectedMethod === 1 ? "VN_PAY" : "COD",
             },
           };
-          createTransaction(newTransaction);
+
+          if (selectedMethod === 1) {
+            createTransaction(newTransaction);
+          } else {
+            navigate(
+              "/order/success?sellingOrderId=" + data.payload?.sellingOrderId,
+            );
+          }
         }
       },
     });
@@ -184,8 +199,6 @@ const CheckOut: React.FC = () => {
     if (customer && customer.addresses[0]) {
       const address = customer.addresses[0];
       form.setFieldsValue({
-        customerName: `${customer.lastName} ${customer.firstName}`,
-        email: customer.email,
         provinceId: address?.provinceId || undefined,
         districtId: address?.districtId || undefined,
         wardCode: address?.wardCode || undefined,
@@ -195,6 +208,14 @@ const CheckOut: React.FC = () => {
       setDistrictId(address?.districtId);
       setWardCode(address?.wardCode);
       setDescription(address?.description);
+    }
+
+    if (customer) {
+      form.setFieldsValue({
+        customerName: `${customer.lastName} ${customer.firstName}`,
+        email: customer.email,
+        // phone: customer.phone,
+      });
     }
   }, [form, customer]);
 
@@ -233,7 +254,21 @@ const CheckOut: React.FC = () => {
             addresses={addresses}
           />
 
-          <div></div>
+          <PaymentMethodSelector
+            selectedMethod={selectedMethod}
+            setSelectedMethod={setSelectedMethod}
+          />
+
+          <Form.Item>
+            <Button
+              loading={isCreatingSellingOrder || isCreatingTransaction}
+              type="primary"
+              htmlType="submit"
+              className="w-full"
+            >
+              Xác nhận
+            </Button>
+          </Form.Item>
         </div>
 
         {/* Danh sách sản phẩm */}

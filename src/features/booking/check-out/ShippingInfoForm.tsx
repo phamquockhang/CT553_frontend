@@ -1,4 +1,4 @@
-import { Button, Form, Input } from "antd";
+import { Form, Input } from "antd";
 import { FormInstance } from "antd/lib";
 import { IAddress } from "../../../interfaces";
 import AddAddress from "../../components/AddAddress";
@@ -47,7 +47,7 @@ const ShippingInfoForm: React.FC<ShippingInfoFormProps> = ({
         label="Họ và tên"
         rules={[{ required: true, message: "Vui lòng nhập họ và tên" }]}
       >
-        <Input placeholder="Quoc Khang" />
+        <Input placeholder="Nguyen Van A" />
       </Form.Item>
 
       <Form.Item
@@ -55,7 +55,11 @@ const ShippingInfoForm: React.FC<ShippingInfoFormProps> = ({
         label="Số điện thoại"
         rules={[{ required: true, message: "Vui lòng nhập số điện thoại" }]}
       >
-        <Input placeholder="Số điện thoại" />
+        <Input placeholder="0123456789" />
+      </Form.Item>
+
+      <Form.Item name="note" label="Ghi chú" rules={[{ required: false }]}>
+        <Input.TextArea placeholder="Ghi chú" />
       </Form.Item>
 
       <AddAddress
@@ -70,12 +74,6 @@ const ShippingInfoForm: React.FC<ShippingInfoFormProps> = ({
         setDescription={setDescription}
         setFormattedAddress={setFormattedAddress}
       />
-
-      <Form.Item>
-        <Button type="primary" htmlType="submit" className="w-full">
-          Xác nhận
-        </Button>
-      </Form.Item>
     </>
   );
 };
