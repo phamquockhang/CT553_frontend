@@ -1,5 +1,5 @@
 import { UserOutlined } from "@ant-design/icons";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Avatar, Button, Form } from "antd";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
@@ -46,6 +46,7 @@ const CheckOut: React.FC = () => {
   const { cartState, cartDispatch } = useCartData();
 
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const productsIdFormRedux = cartState.cartDetails.map(
     (product) => product.productId,
@@ -101,6 +102,11 @@ const CheckOut: React.FC = () => {
           console.log(data.payload?.paymentMethod.paymentUrl);
           if (data.payload?.paymentMethod.paymentUrl) {
             window.location.href = data.payload?.paymentMethod.paymentUrl;
+          } else {
+            navigate(
+              "/order/success?sellingOrderId=" +
+                data.payload?.sellingOrder.sellingOrderId,
+            );
           }
         } else if (!data.success)
           toast.error(data.message || "Operation failed");
@@ -118,12 +124,14 @@ const CheckOut: React.FC = () => {
       },
 
       onSuccess: (data) => {
-        // queryClient.invalidateQueries({
-        //   predicate: (query) =>
-        //     query.queryKey.includes("selling_orders") ||
-        //     query.queryKey.includes("selling_order") ||
-        //     query.queryKey.includes("customers"),
-        // });
+        queryClient.invalidateQueries({
+          predicate: (query) =>
+            query.queryKey.includes("selling_orders") ||
+            query.queryKey.includes("selling_order") ||
+            query.queryKey.includes("customers"),
+        });
+        if (!data.success)
+          toast.success(data.message || "Operation successful");
         // if (data.success) toast.success(data.message || "Operation successful");
         // else if (!data.success) toast.error(data.message || "Operation failed");
       },
@@ -139,7 +147,7 @@ const CheckOut: React.FC = () => {
       customerId: customer ? customer.customerId : undefined,
       customerName: values.customerName,
       phone: values.phone,
-      // email: isSaveCustomer ? values.email : undefined,
+      email: values.email,
       note: values.note || undefined,
       address: formattedAddress,
       totalAmount: sellingOrderDetails.reduce(
@@ -148,11 +156,8 @@ const CheckOut: React.FC = () => {
       ),
       usedScore: 0,
 
-      // when pay by vnpay: pending
-      // by cod: cod
       paymentStatus:
         selectedMethod === 1 ? PaymentStatus.PENDING : PaymentStatus.COD,
-      // paymentStatus: "UNPAID",
 
       orderStatus: OrderStatus.PENDING,
       sellingOrderDetails: sellingOrderDetails,
@@ -179,13 +184,7 @@ const CheckOut: React.FC = () => {
             },
           };
 
-          if (selectedMethod === 1) {
-            createTransaction(newTransaction);
-          } else {
-            navigate(
-              "/order/success?sellingOrderId=" + data.payload?.sellingOrderId,
-            );
-          }
+          createTransaction(newTransaction);
 
           cartDispatch(clearCart());
         }
@@ -252,7 +251,7 @@ const CheckOut: React.FC = () => {
                   <div>
                     <p className="font-semibold">Khách hàng vãng lai</p>
                     <p className="text-gray-500">
-                      Đăng nhập để tích điểm, nhận ưu đãi và theo dõi đơn hàng
+                      Đăng nhập để tích điểm và nhận ưu đãi!
                     </p>
                     <TbLogin2
                       className="cursor-pointer text-xl"

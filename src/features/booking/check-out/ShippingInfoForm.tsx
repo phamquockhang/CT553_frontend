@@ -1,7 +1,8 @@
-import { Form, Input } from "antd";
+import { Form, Input, Tooltip } from "antd";
 import { FormInstance } from "antd/lib";
 import { IAddress } from "../../../interfaces";
 import AddAddress from "../../components/AddAddress";
+import { IoInformationCircle } from "react-icons/io5";
 
 interface ShippingInfoFormProps {
   form: FormInstance;
@@ -59,6 +60,24 @@ const ShippingInfoForm: React.FC<ShippingInfoFormProps> = ({
         ]}
       >
         <Input placeholder="0123456789" />
+      </Form.Item>
+
+      <Form.Item
+        name="email"
+        label={
+          <div className="flex items-center gap-2">
+            <p>Email</p>
+            <Tooltip title="Thông báo về đơn hàng sẽ gửi qua email này">
+              <IoInformationCircle />
+            </Tooltip>
+          </div>
+        }
+        rules={[
+          { required: true, message: "Vui lòng nhập email" },
+          { type: "email", message: "Email không hợp lệ" },
+        ]}
+      >
+        <Input placeholder="customer@example.com" />
       </Form.Item>
 
       <Form.Item name="note" label="Ghi chú" rules={[{ required: false }]}>
