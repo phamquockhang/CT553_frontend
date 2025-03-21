@@ -1,5 +1,5 @@
 import { UserOutlined } from "@ant-design/icons";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Avatar, Button, Form } from "antd";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
@@ -12,6 +12,7 @@ import {
   ICustomer,
   ISellingOrder,
   ISellingOrderDetail,
+  IVoucher,
   OrderStatus,
   PaymentStatus,
   TransactionType,
@@ -24,6 +25,7 @@ import {
 } from "../services";
 import { useDynamicTitle } from "../utils";
 import { clearCart } from "../redux/slices/cartSlice";
+import PaymentForm from "../features/booking/check-out/PaymentForm";
 
 const CheckOut: React.FC = () => {
   useDynamicTitle("Thanh toán");
@@ -44,8 +46,10 @@ const CheckOut: React.FC = () => {
   >();
   const [selectedMethod, setSelectedMethod] = useState<number>(1);
   const { cartState, cartDispatch } = useCartData();
+  const [useVoucher, setUseVoucher] = useState<IVoucher | undefined>(undefined);
 
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const productsIdFormRedux = cartState.cartDetails.map(
     (product) => product.productId,
@@ -101,6 +105,11 @@ const CheckOut: React.FC = () => {
           console.log(data.payload?.paymentMethod.paymentUrl);
           if (data.payload?.paymentMethod.paymentUrl) {
             window.location.href = data.payload?.paymentMethod.paymentUrl;
+          } else {
+            navigate(
+              "/order/success?sellingOrderId=" +
+                data.payload?.sellingOrder.sellingOrderId,
+            );
           }
         } else if (!data.success)
           toast.error(data.message || "Operation failed");
@@ -118,12 +127,14 @@ const CheckOut: React.FC = () => {
       },
 
       onSuccess: (data) => {
-        // queryClient.invalidateQueries({
-        //   predicate: (query) =>
-        //     query.queryKey.includes("selling_orders") ||
-        //     query.queryKey.includes("selling_order") ||
-        //     query.queryKey.includes("customers"),
-        // });
+        queryClient.invalidateQueries({
+          predicate: (query) =>
+            query.queryKey.includes("selling_orders") ||
+            query.queryKey.includes("selling_order") ||
+            query.queryKey.includes("customers"),
+        });
+        if (!data.success)
+          toast.success(data.message || "Operation successful");
         // if (data.success) toast.success(data.message || "Operation successful");
         // else if (!data.success) toast.error(data.message || "Operation failed");
       },
@@ -134,26 +145,23 @@ const CheckOut: React.FC = () => {
     });
 
   const handleSubmit = (values: ISellingOrder) => {
-    const newValues: Omit<ISellingOrder, "sellingOrderId"> = {
-      // ...values,
+    const newValues = {
+      ...values,
       customerId: customer ? customer.customerId : undefined,
       customerName: values.customerName,
       phone: values.phone,
-      // email: isSaveCustomer ? values.email : undefined,
+      email: values.email,
       note: values.note || undefined,
       address: formattedAddress,
       totalAmount: sellingOrderDetails.reduce(
         (sum, item) => sum + item.totalPrice,
         0,
       ),
-      usedScore: 0,
 
-      // when pay by vnpay: pending
-      // by cod: cod
       paymentStatus:
         selectedMethod === 1 ? PaymentStatus.PENDING : PaymentStatus.COD,
-      // paymentStatus: "UNPAID",
 
+      voucherCode: useVoucher?.voucherCode || undefined,
       orderStatus: OrderStatus.PENDING,
       sellingOrderDetails: sellingOrderDetails,
       earnedScore: 0,
@@ -179,13 +187,7 @@ const CheckOut: React.FC = () => {
             },
           };
 
-          if (selectedMethod === 1) {
-            createTransaction(newTransaction);
-          } else {
-            navigate(
-              "/order/success?sellingOrderId=" + data.payload?.sellingOrderId,
-            );
-          }
+          createTransaction(newTransaction);
 
           cartDispatch(clearCart());
         }
@@ -252,7 +254,7 @@ const CheckOut: React.FC = () => {
                   <div>
                     <p className="font-semibold">Khách hàng vãng lai</p>
                     <p className="text-gray-500">
-                      Đăng nhập để tích điểm, nhận ưu đãi và theo dõi đơn hàng
+                      Đăng nhập để tích điểm và nhận ưu đãi!
                     </p>
                     <TbLogin2
                       className="cursor-pointer text-xl"
@@ -318,42 +320,13 @@ const CheckOut: React.FC = () => {
             </div>
           ))}
 
-          {/* Mã giảm giá */}
-          <div className="my-4 flex items-center">
-            <input
-              type="text"
-              placeholder="Mã giảm giá"
-              className="flex-1 rounded-l-lg border p-2"
-            />
-            <div className="cursor-pointer rounded-r-lg bg-blue-800 px-4 py-2 text-white">
-              SỬ DỤNG
-            </div>
-          </div>
-
-          {/* Tổng tiền */}
-          <div className="border-t pt-4">
-            <p className="flex justify-between">
-              <span className="text-gray-500">Tạm tính:</span>
-              <span className="font-semibold">
-                {sellingOrderDetails
-                  .reduce((sum, item) => sum + item.totalPrice, 0)
-                  .toLocaleString()}
-                đ
-              </span>
-            </p>
-            <p className="text-sm text-gray-500">
-              Phí ship sẽ được xác nhận qua điện thoại
-            </p>
-            <p className="mt-2 flex justify-between text-lg font-semibold">
-              <span>Tổng cộng:</span>
-              <span className="text-black">
-                {sellingOrderDetails
-                  .reduce((sum, item) => sum + item.totalPrice, 0)
-                  .toLocaleString()}
-                đ
-              </span>
-            </p>
-          </div>
+          <PaymentForm
+            form={form}
+            selectedProductsDetails={sellingOrderDetails}
+            customer={customer}
+            useVoucher={useVoucher}
+            setUseVoucher={setUseVoucher}
+          />
         </div>
       </div>
     </Form>

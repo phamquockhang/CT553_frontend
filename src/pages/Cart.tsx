@@ -27,7 +27,7 @@ const Cart: React.FC = () => {
   );
 
   const cartData = customer && customer.customerId ? cartState : undefined;
-  console.log("cartData", cartData);
+  // console.log("cartData", cartData);
 
   function findCartDetailId(productId: number) {
     return cartData?.cartDetails.find(
