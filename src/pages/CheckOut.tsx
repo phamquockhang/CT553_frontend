@@ -12,6 +12,7 @@ import {
   ICustomer,
   ISellingOrder,
   ISellingOrderDetail,
+  IVoucher,
   OrderStatus,
   PaymentStatus,
   TransactionType,
@@ -24,6 +25,7 @@ import {
 } from "../services";
 import { useDynamicTitle } from "../utils";
 import { clearCart } from "../redux/slices/cartSlice";
+import PaymentForm from "../features/booking/check-out/PaymentForm";
 
 const CheckOut: React.FC = () => {
   useDynamicTitle("Thanh toán");
@@ -44,6 +46,7 @@ const CheckOut: React.FC = () => {
   >();
   const [selectedMethod, setSelectedMethod] = useState<number>(1);
   const { cartState, cartDispatch } = useCartData();
+  const [useVoucher, setUseVoucher] = useState<IVoucher | undefined>(undefined);
 
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -142,8 +145,8 @@ const CheckOut: React.FC = () => {
     });
 
   const handleSubmit = (values: ISellingOrder) => {
-    const newValues: Omit<ISellingOrder, "sellingOrderId"> = {
-      // ...values,
+    const newValues = {
+      ...values,
       customerId: customer ? customer.customerId : undefined,
       customerName: values.customerName,
       phone: values.phone,
@@ -154,11 +157,11 @@ const CheckOut: React.FC = () => {
         (sum, item) => sum + item.totalPrice,
         0,
       ),
-      usedScore: 0,
 
       paymentStatus:
         selectedMethod === 1 ? PaymentStatus.PENDING : PaymentStatus.COD,
 
+      voucherCode: useVoucher?.voucherCode || undefined,
       orderStatus: OrderStatus.PENDING,
       sellingOrderDetails: sellingOrderDetails,
       earnedScore: 0,
@@ -317,42 +320,13 @@ const CheckOut: React.FC = () => {
             </div>
           ))}
 
-          {/* Mã giảm giá */}
-          <div className="my-4 flex items-center">
-            <input
-              type="text"
-              placeholder="Mã giảm giá"
-              className="flex-1 rounded-l-lg border p-2"
-            />
-            <div className="cursor-pointer rounded-r-lg bg-blue-800 px-4 py-2 text-white">
-              SỬ DỤNG
-            </div>
-          </div>
-
-          {/* Tổng tiền */}
-          <div className="border-t pt-4">
-            <p className="flex justify-between">
-              <span className="text-gray-500">Tạm tính:</span>
-              <span className="font-semibold">
-                {sellingOrderDetails
-                  .reduce((sum, item) => sum + item.totalPrice, 0)
-                  .toLocaleString()}
-                đ
-              </span>
-            </p>
-            <p className="text-sm text-gray-500">
-              Phí ship sẽ được xác nhận qua điện thoại
-            </p>
-            <p className="mt-2 flex justify-between text-lg font-semibold">
-              <span>Tổng cộng:</span>
-              <span className="text-black">
-                {sellingOrderDetails
-                  .reduce((sum, item) => sum + item.totalPrice, 0)
-                  .toLocaleString()}
-                đ
-              </span>
-            </p>
-          </div>
+          <PaymentForm
+            form={form}
+            selectedProductsDetails={sellingOrderDetails}
+            customer={customer}
+            useVoucher={useVoucher}
+            setUseVoucher={setUseVoucher}
+          />
         </div>
       </div>
     </Form>
