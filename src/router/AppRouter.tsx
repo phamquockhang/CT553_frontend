@@ -11,7 +11,7 @@ import Search from "../pages/Search";
 import Cart from "../pages/Cart";
 import Items from "../pages/Items";
 import CheckOut from "../pages/CheckOut";
-import SecoundLayout from "../layouts/SecoundLayout";
+import CheckoutLayout from "../layouts/CheckoutLayout";
 import SuccessfulPayment from "../pages/SuccessfulPayment";
 import FailedPayment from "../pages/FailedPayment";
 import SuccessfulOrder from "../pages/SuccessfulOrder";
@@ -93,7 +93,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/",
-    element: <SecoundLayout />,
+    element: <CheckoutLayout />,
     errorElement: <ErrorPage />,
     children: [
       {
