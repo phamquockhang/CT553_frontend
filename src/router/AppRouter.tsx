@@ -15,6 +15,8 @@ import CheckoutLayout from "../layouts/CheckoutLayout";
 import SuccessfulPayment from "../pages/SuccessfulPayment";
 import FailedPayment from "../pages/FailedPayment";
 import SuccessfulOrder from "../pages/SuccessfulOrder";
+import ProfileLayout from "../layouts/ProfileLayout";
+import MyAccount from "../pages/MyAccount";
 
 const router = createBrowserRouter([
   {
@@ -88,6 +90,21 @@ const router = createBrowserRouter([
       {
         path: "order/success",
         element: <SuccessfulOrder />,
+      },
+      {
+        path: "/",
+        element: <ProfileLayout />,
+        errorElement: <ErrorPage />,
+        children: [
+          {
+            path: "my-account",
+            element: <MyAccount />,
+          },
+          {
+            path: "my-orders",
+            element: <div>My Orders</div>,
+          },
+        ],
       },
     ],
   },
