@@ -45,11 +45,11 @@ const ProfileLayout: React.FC = () => {
       },
       {
         label: (
-          <NavLink className="" to="/my-orders">
+          <NavLink className="" to="/selling-orders">
             Đơn hàng của tôi
           </NavLink>
         ),
-        key: "my-orders",
+        key: "selling-orders",
         icon: <FaBoxesStacked />,
       },
     ];

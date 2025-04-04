@@ -30,11 +30,16 @@ export enum PaymentStatus {
   EXPIRED = "EXPIRED",
 }
 
+export enum whenCreate_PaymentStatus {
+  COD = "COD",
+  SUCCESS = "SUCCESS",
+}
+
 export enum OrderStatus {
   PENDING = "PENDING",
   CONFIRMED = "CONFIRMED",
   PREPARING = "PREPARING",
-  SHIPPING = "SHIPPING",
+  DELIVERING = "DELIVERING",
   DELIVERED = "DELIVERED",
   COMPLETED = "COMPLETED",
   CANCELLED = "CANCELLED",

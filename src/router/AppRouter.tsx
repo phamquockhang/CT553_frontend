@@ -17,6 +17,8 @@ import FailedPayment from "../pages/FailedPayment";
 import SuccessfulOrder from "../pages/SuccessfulOrder";
 import ProfileLayout from "../layouts/ProfileLayout";
 import MyAccount from "../pages/MyAccount";
+import MyOrders from "../pages/MyOrders";
+import SellingOrderInfo from "../pages/SellingOrderInfo";
 
 const router = createBrowserRouter([
   {
@@ -101,8 +103,17 @@ const router = createBrowserRouter([
             element: <MyAccount />,
           },
           {
-            path: "my-orders",
-            element: <div>My Orders</div>,
+            path: "selling-orders",
+            children: [
+              {
+                path: "",
+                element: <MyOrders />,
+              },
+              {
+                path: ":sellingOrderId",
+                element: <SellingOrderInfo />,
+              },
+            ],
           },
         ],
       },

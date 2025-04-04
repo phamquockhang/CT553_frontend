@@ -4,9 +4,10 @@ import { useAddressData } from "../features/components/hooks/useAddressData";
 import AddAddress from "../features/profile/AddAddress";
 import AddressItemInList from "../features/profile/components/AddressItemInList";
 import UpdatePersonalInfo from "../features/profile/UpdatePersonalInfo";
-import { formatAddressName } from "../utils";
+import { formatAddressName, useDynamicTitle } from "../utils";
 
 const MyAccount: React.FC = () => {
+  useDynamicTitle("Quản lý tài khoản");
   const { user } = useLoggedInCustomer();
   const addressDefault = user?.addresses.find((addr) => addr.isDefault);
   const {
