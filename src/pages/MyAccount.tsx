@@ -1,10 +1,10 @@
-import { Button, Card, Descriptions, Tooltip } from "antd";
+import { Card, Descriptions } from "antd";
 import { useLoggedInCustomer } from "../features/auth/hooks";
 import { useAddressData } from "../features/components/hooks/useAddressData";
-import AddressItem from "../features/profile/components/AddressItem";
+import AddAddress from "../features/profile/AddAddress";
+import AddressItemInList from "../features/profile/components/AddressItemInList";
 import UpdatePersonalInfo from "../features/profile/UpdatePersonalInfo";
 import { formatAddressName } from "../utils";
-import AddAddress from "../features/profile/AddAddress";
 
 const MyAccount: React.FC = () => {
   const { user } = useLoggedInCustomer();
@@ -31,11 +31,20 @@ const MyAccount: React.FC = () => {
     wardData,
   );
 
-  window.scrollTo(0, 0);
+  // window.scrollTo(0, 0);
 
-  const sortedAddress = user?.addresses?.sort((a, b) => {
-    return (a.createdAt ?? 0) > (b.createdAt ?? 0) ? -1 : 1;
-  });
+  const sortedAddress = user?.addresses
+    .sort((a, b) => {
+      return (a.description || "").localeCompare(b.description || "");
+    })
+    .sort((a, b) => {
+      if (a.isDefault && !b.isDefault) {
+        return -1;
+      } else if (!a.isDefault && b.isDefault) {
+        return 1;
+      }
+      return 0;
+    });
 
   return (
     <div className="flex flex-col gap-4">
@@ -82,26 +91,8 @@ const MyAccount: React.FC = () => {
           <div className="flex flex-col gap-2">
             {sortedAddress.map((addr) => {
               return (
-                <div className="relative" key={addr.addressId}>
-                  <AddressItem address={addr} />
-                  {!addr.isDefault && (
-                    <div
-                      className="absolute right-0 top-1"
-                      style={{ zIndex: 100 }}
-                    >
-                      <Tooltip title="Chọn làm địa chỉ mặc định mới">
-                        <Button
-                          type="link"
-                          className=""
-                          onClick={() => {
-                            // Handle set default address
-                          }}
-                        >
-                          Chọn
-                        </Button>
-                      </Tooltip>
-                    </div>
-                  )}
+                <div className="group relative" key={addr.addressId}>
+                  <AddressItemInList addr={addr} />
                 </div>
               );
             })}

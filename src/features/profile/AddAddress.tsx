@@ -1,18 +1,16 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button, Form, Modal } from "antd";
 import { useState } from "react";
-import toast from "react-hot-toast";
 import { IAddress, ICustomer } from "../../interfaces";
-import { addressService } from "../../services";
 import AddAddressForm from "./components/AddAddressForm";
+import { useAddressHooks } from "./hooks";
 
 interface AddAddressProps {
   user: ICustomer;
 }
 
 const AddAddress: React.FC<AddAddressProps> = ({ user }) => {
-  const [form] = Form.useForm();
-  const queryClient = useQueryClient();
+  const [form] = Form.useForm<IAddress>();
+  const { createAddress, isCreatingAddress } = useAddressHooks();
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
 
   const [provinceId, setProvinceId] = useState<number>();
@@ -27,49 +25,6 @@ const AddAddress: React.FC<AddAddressProps> = ({ user }) => {
   const handleCloseModal = () => {
     setIsOpenModal(false);
   };
-
-  const { mutate: createAddress, isPending } = useMutation({
-    mutationFn: ({
-      customerId,
-      newAddress,
-    }: {
-      customerId: string;
-      newAddress: IAddress;
-    }) => {
-      return addressService.create(customerId, newAddress);
-    },
-
-    // onSuccess: () => {
-    //   form.resetFields();
-    //   setProvinceId(undefined);
-    //   setDistrictId(undefined);
-    //   setWardCode(undefined);
-    //   setDescription(undefined);
-
-    //   setIsOpenModal(false);
-    // },
-    onSuccess: (data) => {
-      queryClient.invalidateQueries({
-        predicate: (query) => {
-          return query.queryKey.includes("customer");
-        },
-      });
-
-      if (data && data.success) {
-        toast.success(
-          data && data.message ? data.message : "Thêm địa chỉ thành công",
-        );
-      } else if (data && !data.success) {
-        toast.error(
-          data && data.message ? data.message : "Thêm địa chỉ thất bại",
-        );
-      }
-    },
-
-    onError: (error) => {
-      console.log(error);
-    },
-  });
 
   function handleFinish() {
     if (provinceId && districtId && wardCode && description) {
@@ -87,7 +42,12 @@ const AddAddress: React.FC<AddAddressProps> = ({ user }) => {
         },
         {
           onSuccess: () => {
-            setIsOpenModal(false);
+            form.resetFields();
+            setProvinceId(undefined);
+            setDistrictId(undefined);
+            setWardCode(undefined);
+            setDescription(undefined);
+
             setIsOpenModal(false);
           },
 
@@ -136,14 +96,14 @@ const AddAddress: React.FC<AddAddressProps> = ({ user }) => {
           />
 
           <Form.Item className="text-right" wrapperCol={{ span: 24 }}>
-            <Button onClick={handleCloseModal} loading={isPending}>
+            <Button onClick={handleCloseModal} loading={isCreatingAddress}>
               Hủy
             </Button>
             <Button
               className="ml-2"
               type="primary"
               htmlType="submit"
-              loading={isPending}
+              loading={isCreatingAddress}
             >
               Thêm mới
             </Button>
