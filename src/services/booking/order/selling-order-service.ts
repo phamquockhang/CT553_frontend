@@ -7,12 +7,20 @@ import {
   PaginationParams,
   SellingOrderFilterCriteria,
   SortParams,
+  TimeRange,
 } from "../../../interfaces";
 import { createApiClient } from "../../api-client";
 
 interface ISellingOrderService {
   getSellingOrder(orderId: string): Promise<ApiResponse<ISellingOrder>>;
   getSellingOrders(
+    pagination: PaginationParams,
+    query: string,
+    filter?: SellingOrderFilterCriteria,
+    sort?: SortParams,
+  ): Promise<ApiResponse<Page<ISellingOrder>>>;
+  getSellingOrdersByCustomer(
+    customerId: string,
     pagination: PaginationParams,
     query: string,
     filter?: SellingOrderFilterCriteria,
@@ -49,6 +57,27 @@ class SellingOrderService implements ISellingOrderService {
         query,
         sortBy: sort?.sortBy !== "" ? sort?.sortBy : undefined,
         direction: sort?.direction !== "" ? sort?.direction : undefined,
+      },
+    });
+  }
+
+  async getSellingOrdersByCustomer(
+    customerId: string,
+    pagination: PaginationParams,
+    query: string,
+    filter?: SellingOrderFilterCriteria,
+    sort?: SortParams,
+    timeRange?: TimeRange,
+  ): Promise<ApiResponse<Page<ISellingOrder>>> {
+    return await apiClient.get(`/customer/${customerId}`, {
+      params: {
+        ...pagination,
+        ...filter,
+        query,
+        sortBy: sort?.sortBy !== "" ? sort?.sortBy : undefined,
+        direction: sort?.direction !== "" ? sort?.direction : undefined,
+        startDate: timeRange?.startDate,
+        endDate: timeRange?.endDate,
       },
     });
   }

@@ -121,7 +121,7 @@ const Header: React.FC = () => {
 
   return (
     <header
-      className={`${isSticky ? "-translate-y-0" : `-translate-y-[100%]`} sticky top-0 z-50 rounded-b-3xl bg-white shadow-md transition-all duration-500`}
+      className={`${isSticky ? "-translate-y-0" : `-translate-y-[100%]`} sticky top-0 z-40 rounded-b-3xl bg-white shadow-md transition-all duration-500`}
     >
       <img src="/banner-header.jpg" alt="Banner Header" />
       <div className="mx-auto flex items-center justify-between px-4 py-2">

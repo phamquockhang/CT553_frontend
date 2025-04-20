@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
 
-const SecoundLayout: React.FC = () => {
+const CheckoutLayout: React.FC = () => {
   return (
     <div className="flex min-h-screen flex-col">
       <div className="flex-grow">
@@ -12,4 +12,4 @@ const SecoundLayout: React.FC = () => {
   );
 };
 
-export default SecoundLayout;
+export default CheckoutLayout;

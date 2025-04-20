@@ -11,10 +11,14 @@ import Search from "../pages/Search";
 import Cart from "../pages/Cart";
 import Items from "../pages/Items";
 import CheckOut from "../pages/CheckOut";
-import SecoundLayout from "../layouts/SecoundLayout";
+import CheckoutLayout from "../layouts/CheckoutLayout";
 import SuccessfulPayment from "../pages/SuccessfulPayment";
 import FailedPayment from "../pages/FailedPayment";
 import SuccessfulOrder from "../pages/SuccessfulOrder";
+import ProfileLayout from "../layouts/ProfileLayout";
+import MyAccount from "../pages/MyAccount";
+import MyOrders from "../pages/MyOrders";
+import SellingOrderInfo from "../pages/SellingOrderInfo";
 
 const router = createBrowserRouter([
   {
@@ -89,11 +93,35 @@ const router = createBrowserRouter([
         path: "order/success",
         element: <SuccessfulOrder />,
       },
+      {
+        path: "/",
+        element: <ProfileLayout />,
+        errorElement: <ErrorPage />,
+        children: [
+          {
+            path: "my-account",
+            element: <MyAccount />,
+          },
+          {
+            path: "selling-orders",
+            children: [
+              {
+                path: "",
+                element: <MyOrders />,
+              },
+              {
+                path: ":sellingOrderId",
+                element: <SellingOrderInfo />,
+              },
+            ],
+          },
+        ],
+      },
     ],
   },
   {
     path: "/",
-    element: <SecoundLayout />,
+    element: <CheckoutLayout />,
     errorElement: <ErrorPage />,
     children: [
       {

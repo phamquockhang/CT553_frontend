@@ -137,13 +137,24 @@ const AccountMenu: React.FC = () => {
     {
       label: (
         <Link
-          to="/manage-account/my-account"
+          to="/my-account"
           className="block cursor-pointer px-4 py-2 font-bold text-gray-700"
         >
           Quản lý tài khoản
         </Link>
       ),
-      key: "manage-account",
+      key: "my-account",
+    },
+    {
+      label: (
+        <Link
+          to="/selling-orders"
+          className="block cursor-pointer px-4 py-2 font-bold text-gray-700"
+        >
+          Đơn hàng của tôi
+        </Link>
+      ),
+      key: "selling-orders",
     },
     {
       label: (

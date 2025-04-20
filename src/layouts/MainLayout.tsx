@@ -1,10 +1,13 @@
 import { Outlet } from "react-router-dom";
 import Footer from "../common/Footer";
 import Header from "../common/Header";
+import FloatingChat from "../features/chat-box/FloatingChat";
 
 const MainLayout: React.FC = () => {
   return (
     <div className="flex min-h-screen flex-col">
+      <FloatingChat />
+
       <Header />
       <div className="flex-grow">
         <div className="container mx-auto mt-1 px-5 transition-all duration-200 sm:px-10 xl:px-20">

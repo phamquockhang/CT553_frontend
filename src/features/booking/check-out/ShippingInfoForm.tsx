@@ -1,7 +1,7 @@
 import { Form, Input, Tooltip } from "antd";
 import { FormInstance } from "antd/lib";
 import { IAddress } from "../../../interfaces";
-import AddAddress from "../../components/AddAddress";
+import AddAddressForm from "../../profile/components/AddAddressForm";
 import { IoInformationCircle } from "react-icons/io5";
 
 interface ShippingInfoFormProps {
@@ -84,7 +84,7 @@ const ShippingInfoForm: React.FC<ShippingInfoFormProps> = ({
         <Input.TextArea placeholder="Ghi chú" />
       </Form.Item>
 
-      <AddAddress
+      <AddAddressForm
         form={form}
         provinceId={provinceId}
         setProvinceId={setProvinceId}

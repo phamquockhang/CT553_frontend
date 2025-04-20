@@ -24,7 +24,7 @@ export interface ICustomer {
   gender: "MALE" | "FEMALE" | "OTHER";
   password?: string;
   isActivated: boolean;
-  dob: string | Dayjs;
+  dob: string;
   role: IRole;
   addresses: IAddress[];
   score: IScore;

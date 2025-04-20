@@ -1,9 +1,8 @@
-import { useQuery } from "@tanstack/react-query";
 import { Form, Input, Select } from "antd";
 import { FormInstance } from "antd/lib";
 import { useEffect } from "react";
-import { addressPublicApiService } from "../../services";
-import { formatAddressName } from "../../utils";
+import { formatAddressName } from "../../../utils";
+import { useAddressData } from "../../components/hooks/useAddressData";
 
 interface AddAddressProps {
   viewMode?: boolean;
@@ -22,7 +21,7 @@ interface AddAddressProps {
     | undefined;
 }
 
-const AddAddress: React.FC<AddAddressProps> = ({
+const AddAddressForm: React.FC<AddAddressProps> = ({
   viewMode,
   form,
   provinceId,
@@ -36,52 +35,67 @@ const AddAddress: React.FC<AddAddressProps> = ({
 
   setFormattedAddress,
 }) => {
-  const { data: provinceData, isLoading: isLoadingProvince } = useQuery({
-    queryKey: ["province"],
-    queryFn: async () => {
-      const response = await addressPublicApiService.getProvinces();
-      return response.data;
-    },
-    select: (data) =>
-      data?.sort((a, b) => a.ProvinceName.localeCompare(b.ProvinceName)),
+  // const { data: provinceData, isLoading: isLoadingProvince } = useQuery({
+  //   queryKey: ["province"],
+  //   queryFn: async () => {
+  //     const response = await addressPublicApiService.getProvinces();
+  //     return response.data;
+  //   },
+  //   select: (data) =>
+  //     data?.sort((a, b) => a.ProvinceName.localeCompare(b.ProvinceName)),
+  // });
+
+  // const provinceOptions = provinceData?.map((province) => ({
+  //   value: province.ProvinceID,
+  //   label: province.ProvinceName,
+  // }));
+
+  // const { data: districtData, isLoading: isLoadingDistrict } = useQuery({
+  //   queryKey: ["district", provinceId],
+  //   queryFn: async () => {
+  //     const response = await addressPublicApiService.getDistricts(provinceId);
+  //     return response.data;
+  //   },
+  //   select: (data) =>
+  //     data?.sort((a, b) => a.DistrictName.localeCompare(b.DistrictName)),
+  //   enabled: Boolean(provinceId),
+  // });
+
+  // const districtOptions = districtData?.map((district) => ({
+  //   value: district.DistrictID,
+  //   label: district.DistrictName,
+  // }));
+
+  // const { data: wardData, isLoading: isLoadingWard } = useQuery({
+  //   queryKey: ["ward", districtId],
+  //   queryFn: async () => {
+  //     const response = await addressPublicApiService.getWards(districtId);
+  //     return response.data;
+  //   },
+  //   select: (data) =>
+  //     data?.sort((a, b) => a.WardName.localeCompare(b.WardName)),
+  //   enabled: Boolean(districtId),
+  // });
+
+  // const wardOptions = wardData?.map((ward) => ({
+  //   value: ward.WardCode,
+  //   label: ward.WardName,
+  // }));
+
+  const {
+    provinceData,
+    districtData,
+    wardData,
+    provinceOptions,
+    districtOptions,
+    wardOptions,
+    isLoadingProvince,
+    isLoadingDistrict,
+    isLoadingWard,
+  } = useAddressData({
+    provinceId,
+    districtId,
   });
-
-  const provinceOptions = provinceData?.map((province) => ({
-    value: province.ProvinceID,
-    label: province.ProvinceName,
-  }));
-
-  const { data: districtData, isLoading: isLoadingDistrict } = useQuery({
-    queryKey: ["district", provinceId],
-    queryFn: async () => {
-      const response = await addressPublicApiService.getDistricts(provinceId);
-      return response.data;
-    },
-    select: (data) =>
-      data?.sort((a, b) => a.DistrictName.localeCompare(b.DistrictName)),
-    enabled: Boolean(provinceId),
-  });
-
-  const districtOptions = districtData?.map((district) => ({
-    value: district.DistrictID,
-    label: district.DistrictName,
-  }));
-
-  const { data: wardData, isLoading: isLoadingWard } = useQuery({
-    queryKey: ["ward", districtId],
-    queryFn: async () => {
-      const response = await addressPublicApiService.getWards(districtId);
-      return response.data;
-    },
-    select: (data) =>
-      data?.sort((a, b) => a.WardName.localeCompare(b.WardName)),
-    enabled: Boolean(districtId),
-  });
-
-  const wardOptions = wardData?.map((ward) => ({
-    value: ward.WardCode,
-    label: ward.WardName,
-  }));
 
   useEffect(() => {
     if (provinceId && districtId && wardCode && description) {
@@ -301,4 +315,4 @@ const AddAddress: React.FC<AddAddressProps> = ({
   );
 };
 
-export default AddAddress;
+export default AddAddressForm;
