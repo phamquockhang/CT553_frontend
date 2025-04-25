@@ -237,25 +237,24 @@ const SellingOrderForm: React.FC<SellingOrderFormProps> = ({
             Thoát
           </Button>
 
-          {sellingOrderToUpdate?.orderStatus !== OrderStatus.CANCELLED &&
-            sellingOrderToUpdate?.orderStatus !== OrderStatus.COMPLETED && (
-              <ConfigProvider
-                theme={{
-                  token: {
-                    colorPrimary: "#dc2626",
-                  },
-                }}
+          {sellingOrderToUpdate?.orderStatus === OrderStatus.PENDING && (
+            <ConfigProvider
+              theme={{
+                token: {
+                  colorPrimary: "#dc2626",
+                },
+              }}
+            >
+              <Button
+                type="primary"
+                className="bg-red-600"
+                htmlType="submit"
+                loading={isCancelOrder}
               >
-                <Button
-                  type="primary"
-                  className="bg-red-600"
-                  htmlType="submit"
-                  loading={isCancelOrder}
-                >
-                  Hủy đơn hàng
-                </Button>
-              </ConfigProvider>
-            )}
+                Hủy đơn hàng
+              </Button>
+            </ConfigProvider>
+          )}
         </Space>
       </Form.Item>
     </Form>
