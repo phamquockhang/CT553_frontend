@@ -5,6 +5,7 @@ import { ICustomer, IProduct } from "../../../interfaces";
 import useCartData from "../../../redux";
 import { addProduct } from "../../../redux/slices/cartSlice";
 import { AddProductToCart } from "../../../services";
+import { useNavigate } from "react-router-dom";
 
 interface ProductOderProps {
   product?: IProduct;
@@ -18,6 +19,7 @@ const ProductOder: React.FC<ProductOderProps> = ({ product }) => {
   );
   const cartId = customer?.cart.cartId;
   const { addProductToCart } = AddProductToCart();
+  const navigate = useNavigate();
 
   const handleAddToCart = () => {
     if (product?.productId) {
@@ -96,7 +98,13 @@ const ProductOder: React.FC<ProductOderProps> = ({ product }) => {
         >
           THÊM VÀO GIỎ
         </button>
-        <button className="flex-1 rounded-md bg-red-600 py-2 font-semibold text-white">
+        <button
+          className="flex-1 rounded-md bg-red-600 py-2 font-semibold text-white"
+          onClick={() => {
+            navigate("/cart");
+            handleAddToCart();
+          }}
+        >
           MUA NGAY
         </button>
       </div>
