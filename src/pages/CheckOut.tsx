@@ -201,7 +201,7 @@ const CheckOut: React.FC = () => {
 
   useEffect(() => {
     if (customer && customer.addresses[0]) {
-      const address = customer.addresses[0];
+      const address = customer.addresses.find((address) => address.isDefault);
       form.setFieldsValue({
         provinceId: address?.provinceId || undefined,
         districtId: address?.districtId || undefined,
@@ -244,7 +244,7 @@ const CheckOut: React.FC = () => {
                     <p className="text-gray-500">
                       Điểm tích lũy hiện có:{" "}
                       <span className="font-semibold text-blue-900">
-                        {customer?.score.newValue}
+                        {customer?.score.newValue.toLocaleString()}
                       </span>
                     </p>
                   </div>
