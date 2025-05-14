@@ -50,22 +50,6 @@ export const PERMISSIONS = {
   }
 }
 
-// export const ROUTE_TYPE_TRANSLATION: Record<RouteType, string> = {
-//   [RouteType.DOMESTIC]: "Nội địa",
-//   [RouteType.INTERNATIONAL]: "Quốc tế",
-// };
-
-// export const PASSENGER_TYPE_TRANSLATION: Record<PassengerType, string> = {
-//   [PassengerType.ADULT]: "Người lớn",
-//   [PassengerType.CHILD]: "Trẻ em",
-//   [PassengerType.INFANT]: "Em bé",
-// };
-
-// export const COUPON_TYPE_TRANSLATION: Record<CouponType, string> = {
-//   [CouponType.AMOUNT]: "VND",
-//   [CouponType.PERCENTAGE]: "%",
-// };
-
 export const VIETNAM_TIMEZONE = "Asia/Ho_Chi_Minh"
 
 export const PRIMARY_COLOR = "#003F8F"

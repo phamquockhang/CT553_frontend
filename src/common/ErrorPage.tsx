@@ -2,7 +2,11 @@ import { BiSolidError } from "react-icons/bi";
 import { isRouteErrorResponse, useNavigate, useRouteError } from "react-router";
 import { useDynamicTitle } from "../utils";
 
-const ErrorPage: React.FC = () => {
+interface ErrorPageProps {
+  errMessage?: string;
+}
+
+const ErrorPage: React.FC<ErrorPageProps> = ({ errMessage }) => {
   useDynamicTitle("Error");
   const routeError = useRouteError();
   const navigate = useNavigate();
@@ -24,14 +28,16 @@ const ErrorPage: React.FC = () => {
         <BiSolidError className="text-9xl text-red-500" />
         <p className="text-xl font-semibold">Oops! Something went wrong.</p>
 
-        <p className="my-4">{errorMessage}</p>
+        <p className="my-4">{errMessage || errorMessage}</p>
 
-        <button
-          className="rounded-md bg-red-500 px-4 py-2 text-white"
-          onClick={() => navigate("/")}
-        >
-          <p>Trở về trang chủ</p>
-        </button>
+        {!errMessage && (
+          <button
+            className="rounded-md bg-red-500 px-4 py-2 text-white"
+            onClick={() => navigate("/")}
+          >
+            <p>Trở về trang chủ</p>
+          </button>
+        )}
       </div>
     </div>
   );

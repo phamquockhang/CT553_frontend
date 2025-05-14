@@ -1,7 +1,18 @@
-interface HomeProps {}
+import CategoryItems from "../features/category/items/CategoryItems";
+import Banners from "../features/components/home/Banners";
+import BestSellers from "../features/components/home/BestSellers";
+import { useDynamicTitle } from "../utils";
 
-const Home: React.FC<HomeProps> = ({}) => {
-  return <div>Home</div>
-}
+const Home: React.FC = () => {
+  useDynamicTitle("Trang chủ K-Seafood");
 
-export default Home
+  return (
+    <>
+      <Banners />
+      <BestSellers />
+      <CategoryItems />
+    </>
+  );
+};
+
+export default Home;

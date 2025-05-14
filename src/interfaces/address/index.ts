@@ -20,7 +20,7 @@ export interface IWard {
 }
 
 export interface IAddress {
-  addressId?: number;
+  addressId?: string;
   provinceId: number;
   districtId: number;
   wardCode: string;

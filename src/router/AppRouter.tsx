@@ -4,6 +4,21 @@ import ErrorPage from "../common/ErrorPage";
 import Login from "../pages/Login";
 import Home from "../pages/Home";
 import Register from "../pages/Register";
+import BestSellerProducts from "../pages/BestSellerProducts";
+import Product from "../pages/Product";
+import Item from "../pages/Item";
+import Search from "../pages/Search";
+import Cart from "../pages/Cart";
+import Items from "../pages/Items";
+import CheckOut from "../pages/CheckOut";
+import CheckoutLayout from "../layouts/CheckoutLayout";
+import SuccessfulPayment from "../pages/SuccessfulPayment";
+import FailedPayment from "../pages/FailedPayment";
+import SuccessfulOrder from "../pages/SuccessfulOrder";
+import ProfileLayout from "../layouts/ProfileLayout";
+import MyAccount from "../pages/MyAccount";
+import MyOrders from "../pages/MyOrders";
+import SellingOrderInfo from "../pages/SellingOrderInfo";
 
 const router = createBrowserRouter([
   {
@@ -22,6 +37,96 @@ const router = createBrowserRouter([
       {
         path: "register",
         element: <Register />,
+      },
+      {
+        path: "items",
+        children: [
+          {
+            path: "",
+            element: <Items />,
+          },
+          {
+            path: ":itemId",
+            element: <Item />,
+          },
+          {
+            path: "best-seller-products",
+            element: <BestSellerProducts />,
+          },
+        ],
+      },
+      {
+        path: "products",
+        children: [
+          {
+            path: "",
+            element: <div>Products</div>,
+          },
+          {
+            path: ":productId",
+            element: <Product />,
+          },
+        ],
+      },
+      {
+        path: "search",
+        element: <Search />,
+      },
+      {
+        path: "cart",
+        element: <Cart />,
+      },
+      {
+        path: "order/payment",
+        children: [
+          {
+            path: "success",
+            element: <SuccessfulPayment />,
+          },
+          {
+            path: "fail",
+            element: <FailedPayment />,
+          },
+        ],
+      },
+      {
+        path: "order/success",
+        element: <SuccessfulOrder />,
+      },
+      {
+        path: "/",
+        element: <ProfileLayout />,
+        errorElement: <ErrorPage />,
+        children: [
+          {
+            path: "my-account",
+            element: <MyAccount />,
+          },
+          {
+            path: "selling-orders",
+            children: [
+              {
+                path: "",
+                element: <MyOrders />,
+              },
+              {
+                path: ":sellingOrderId",
+                element: <SellingOrderInfo />,
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+  {
+    path: "/",
+    element: <CheckoutLayout />,
+    errorElement: <ErrorPage />,
+    children: [
+      {
+        path: "check-out",
+        element: <CheckOut />,
       },
     ],
   },

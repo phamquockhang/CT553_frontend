@@ -1,51 +1,51 @@
-import { GetProp } from "antd"
-import { UploadProps } from "antd/lib"
+import { GetProp } from "antd";
+import { UploadProps } from "antd/lib";
 
-export * from "./enums"
-export * from "./constants"
+export * from "./enums";
+export * from "./constants";
 
 export interface ApiResponse<T> {
-  status: number
-  success: boolean
-  error?: string
-  message?: string
-  payload?: T
-  data?: T
+  status: number;
+  success: boolean;
+  error?: string;
+  message?: string;
+  payload?: T;
+  data?: T;
 }
 
 export interface PaginationParams {
-  page: number
-  pageSize: number
+  page: number;
+  pageSize: number;
 }
 
 export interface PaginationMeta {
-  page: number
-  pageSize: number
-  pages: number
-  total: number
+  page: number;
+  pageSize: number;
+  pages: number;
+  total: number;
 }
 
 export interface Page<T> {
-  data: T[]
-  meta: PaginationMeta
+  data: T[];
+  meta: PaginationMeta;
 }
 
 export interface SortParams {
-  sortBy?: string
-  direction?: string
+  sortBy?: string;
+  direction?: string;
 }
 
-// export interface ElasticSortParams {
-//   sort: string;
-//   order: string;
-// }
+export interface TimeRange {
+  startDate: string;
+  endDate: string;
+}
 
 export interface ICountry {
-  countryId: number
-  countryName: string
-  countryCode: number
-  iso2Code: string
-  iso3Code: string
+  countryId: number;
+  countryName: string;
+  countryCode: number;
+  iso2Code: string;
+  iso3Code: string;
 }
 
-export type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0]
+export type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];

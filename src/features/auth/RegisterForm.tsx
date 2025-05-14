@@ -17,6 +17,7 @@ import {
   addressService,
   authService,
 } from "../../services";
+import { useNavigate } from "react-router-dom";
 
 const genderOptions = [
   { value: "MALE", label: "Nam" },
@@ -27,6 +28,7 @@ const genderOptions = [
 const RegisterForm: React.FC = () => {
   const [form] = Form.useForm<ICustomer>();
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
   const [provinceId, setProvinceId] = useState<number>();
   const [districtId, setDistrictId] = useState<number>();
   const [wardCode, setWardCode] = useState<string>();
@@ -78,21 +80,30 @@ const RegisterForm: React.FC = () => {
     const newUser = {
       ...values,
     };
+    console.log("newUser", newUser);
+
     registerCustomer(newUser, {
       onSuccess: (newCustomer) => {
         // if (newCustomer && newCustomer.success) {
         if (provinceId && districtId && wardCode && description) {
-          createAddress({
-            // customerId: customerIdByEmail?.payload || "",
-            customerId: newCustomer.payload?.customerId || "",
-            newAddress: {
-              provinceId,
-              districtId,
-              wardCode,
-              description,
-              isDefault: true,
+          createAddress(
+            {
+              // customerId: customerIdByEmail?.payload || "",
+              customerId: newCustomer.payload?.customerId || "",
+              newAddress: {
+                provinceId,
+                districtId,
+                wardCode,
+                description,
+                isDefault: true,
+              },
             },
-          });
+            {
+              onSuccess: () => {
+                navigate("/login");
+              },
+            },
+          );
         }
         // }
       },
@@ -431,8 +442,8 @@ const RegisterForm: React.FC = () => {
         >
           Đăng ký
         </Button>
-      </Form.Item>{" "}
-      git init
+      </Form.Item>
+
       <p>
         Bạn đã có tài khoản?{" "}
         <a
